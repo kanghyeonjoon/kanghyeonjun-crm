@@ -9,6 +9,7 @@ grant usage on schema auth to authenticated,anon;grant execute on function auth.
 await db.exec(
   await fs.readFile("supabase/migrations/202609290001_crm.sql", "utf8"),
 );
+await db.exec(await fs.readFile('supabase/migrations/20260929085812_restrict_internal_functions.sql','utf8'));
 const owner = "11111111-1111-4111-8111-111111111111",
   outsider = "22222222-2222-4222-8222-222222222222",
   viewer = "33333333-3333-4333-8333-333333333333";

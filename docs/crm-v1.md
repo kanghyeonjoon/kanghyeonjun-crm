@@ -4,7 +4,7 @@
 
 ## 접근 권한
 
-Supabase Auth 비밀번호 로그인을 사용합니다. 사용자 계정은 Supabase의 Authentication에서 관리자가 생성합니다. 새 비밀번호는 계정 소유자가 직접 입력해야 합니다. `crm_private.invites`에 소문자 이메일과 역할을 등록한 뒤, 이메일 확인이 끝난 계정이 로그인하면 `crm_enroll`이 회원 등록을 수행합니다. 첫 사용자 자동 관리자 승격은 없습니다.
+Supabase Auth 비밀번호 로그인을 사용합니다. 사용자 계정은 Supabase의 Authentication에서 관리자가 생성합니다. 새 비밀번호는 계정 소유자가 직접 입력해야 합니다. `crm_private.invites`에 소문자 이메일과 역할을 등록한 뒤, 이메일 확인이 끝난 계정이 로그인하면 `crm_enroll`이 회원 등록을 수행합니다. 공개 함수는 SECURITY INVOKER이며, 실제 권한 상승 처리는 비공개 스키마 내부에서 인증된 사용자 ID와 확인된 이메일을 검사합니다. 첫 사용자 자동 관리자 승격은 없습니다.
 
 - owner/operator: 업무 데이터 조회·등록·수정
 - viewer: 조회만 가능
@@ -14,7 +14,7 @@ Supabase Auth 비밀번호 로그인을 사용합니다. 사용자 계정은 Sup
 
 ## 마이그레이션
 
-새 프로젝트에 `supabase/migrations/202609290001_crm.sql`을 한 번 적용합니다. 사용자 이메일과 실제 업무 데이터는 마이그레이션에 넣지 않습니다. 관리 계정의 비공개 SQL 세션에서 다음 템플릿을 필요한 이메일로 대체해 등록합니다.
+새 프로젝트에 `supabase/migrations/`의 SQL을 파일명 순서로 한 번씩 적용합니다. 사용자 이메일과 실제 업무 데이터는 마이그레이션에 넣지 않습니다. 관리 계정의 비공개 SQL 세션에서 다음 템플릿을 필요한 이메일로 대체해 등록합니다.
 
 ```sql
 insert into crm_private.invites(email,role) values (lower('ADMIN_EMAIL'),'owner');
@@ -31,3 +31,7 @@ insert into crm_private.invites(email,role) values (lower('ADMIN_EMAIL'),'owner'
 ## 현재 제한
 
 하나의 회사 업무 공간입니다. 제안서는 링크와 검토 상태를 관리하며 Q1–Q7 본문 편집·자동 생성은 포함하지 않습니다. 연락처는 검수용 텍스트로 기록합니다. 실수로 인한 원본 삭제를 막기 위해 영구 삭제 기능은 제공하지 않습니다. 병원 선택 목록은 첫 1,000건이며 대량 이관 전에 검색형 선택으로 확장해야 합니다. 로그인 사용자에 대한 실제 브라우저 CRUD 검증은 관리자 계정 생성 후 필요합니다.
+
+## 보안 점검
+
+Supabase 자동 RLS 이벤트 함수의 클라이언트 EXECUTE 권한을 회수했습니다. 비공개 invites 테이블은 직접 접근 금지 설계이므로 RLS 정책 미등록 INFO는 의도된 상태입니다.
