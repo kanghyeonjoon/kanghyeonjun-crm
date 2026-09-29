@@ -23,7 +23,9 @@ export function RecordForm({
     ok: false,
     message: "",
   });
-  useEffect(() => { if (result.ok) onSaved?.(); }, [result.ok, onSaved]);
+  useEffect(() => {
+    if (result.ok) onSaved?.();
+  }, [result.ok, onSaved]);
   function input(
     name: string,
     label: string,
