@@ -1,3 +1,7 @@
+# 초기 기반 구축 시점 기록
+
+현재 구현은 [CRM v1](crm-v1.md)을 참고하세요. 아래 내용은 최초 준비 화면의 상태입니다.
+
 # 애플리케이션 기반
 
 Next.js App Router / React / TypeScript로 새 앱을 시작한다. 의존성은 package-lock.json에 고정했다.
