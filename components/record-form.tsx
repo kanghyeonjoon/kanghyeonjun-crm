@@ -1,5 +1,5 @@
 "use client";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { saveRecord } from "@/app/workspace/actions";
 import {
   management,
@@ -12,15 +12,18 @@ export function RecordForm({
   entity,
   hospitals = [],
   record,
+  onSaved,
 }: {
   entity: Entity;
   hospitals?: { id: string; name: string }[];
   record?: Row;
+  onSaved?: () => void;
 }) {
   const [result, action, pending] = useActionState(saveRecord, {
     ok: false,
     message: "",
   });
+  useEffect(() => { if (result.ok) onSaved?.(); }, [result.ok, onSaved]);
   function input(
     name: string,
     label: string,
