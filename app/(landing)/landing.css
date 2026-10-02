@@ -321,3 +321,7 @@ img {
   animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+
+.column-prose { font-size: 17px; line-height: 1.95; overflow-wrap: anywhere; }
+.column-prose p { white-space: pre-wrap; margin: 1.4em 0; }
+.column-prose h2 { font-size: 1.45em; font-weight: 800; margin: 1.8em 0 .7em; line-height: 1.5; }
