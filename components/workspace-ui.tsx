@@ -122,7 +122,9 @@ export function WorkspaceUI({
       timer = setTimeout(
         () =>
           setFit(
-            Math.max(1, Math.min(100, Math.floor((el.clientHeight - 38) / 40))),
+            window.matchMedia("(max-width: 760px)").matches
+              ? 20
+              : Math.max(1, Math.min(100, Math.floor((el.clientHeight - 38) / 40))),
           ),
         100,
       );
@@ -512,7 +514,7 @@ export function WorkspaceUI({
                   현재 페이지 CSV ↓
                 </button>
               </div>
-              <div className="erp-grid-scroll" ref={grid}>
+              <div className="erp-grid-scroll" ref={grid} role="region" aria-label="조회 결과 표, 좌우로 스크롤 가능" tabIndex={0}>
                 <table className="erp-table erp-sticky-actions">
                   <thead>
                     <tr>

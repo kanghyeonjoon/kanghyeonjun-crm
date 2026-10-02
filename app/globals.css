@@ -492,3 +492,46 @@ p {
 .erp-table.diagnosis-table th:nth-child(9) { width: 110px; }
 .diagnosis-table .diagnosis-empty { height: 160px; text-align: center; color: var(--muted); }
 .diagnosis-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+/* Mobile CRM uses document scrolling; only wide result tables scroll sideways. */
+@media (max-width: 760px) {
+  .erp-admin { display: block; height: auto; min-height: 100dvh; overflow: visible; }
+  .erp-sidebar, .erp-sidebar.is-collapsed { position: relative; inset: auto; width: 100%; overflow: visible; }
+  .erp-brand { height: 48px; padding: 0 14px; }
+  .erp-sidebar .erp-brand .erp-nav-label { display: block; }
+  .erp-sidebar nav { display: flex; gap: 4px; padding: 6px 8px; overflow-x: auto; overscroll-behavior-x: contain; }
+  .erp-sidebar nav .erp-nav-label { display: block; flex: none; font-size: 12px; }
+  .erp-sidebar nav :is(.erp-group-label, .erp-nav-count), .erp-sidebar .erp-collapse { display: none; }
+  .erp-sidebar nav a { flex: 0 0 auto; min-height: 44px; padding: 0 12px; gap: 7px; }
+  .erp-sidebar a[aria-current] { box-shadow: inset 0 -3px var(--erp-accent); }
+  .erp-main, .erp-sidebar.is-collapsed + .erp-main { margin-left: 0; height: auto; min-height: 0; width: 100%; }
+  .erp-topbar { min-height: 52px; height: auto; padding: 8px 12px; flex-wrap: wrap; }
+  .erp-content { display: block; overflow: visible; padding: 14px 10px calc(24px + env(safe-area-inset-bottom)); }
+  .erp-page { gap: 12px; }
+  .erp-page-heading { align-items: flex-start; }
+  .erp-page-heading p { line-height: 1.5; }
+  .erp-page-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .erp-admin .erp-button, .erp-pagination button { min-height: 44px; height: auto; padding: 8px 12px; }
+  .erp-search input:not([type="checkbox"]), .erp-search select, .erp-pagination input, .erp-pagination select,
+  .erp-dialog :is(input:not([type="checkbox"]), select, textarea), .login :is(input, select) { min-height: 44px; font-size: 16px; }
+  .erp-field-content > :is(input, select) { flex: 1 1 130px; width: 100%; }
+  .erp-search-field { grid-template-columns: 74px minmax(0, 1fr); }
+  .erp-search-footer { padding: 8px; gap: 8px; }
+  .erp-search-advanced { position: static; margin-top: 8px; box-shadow: none; width: 100%; }
+  .erp-kpi { gap: 8px; }
+  .erp-grid { flex: none; overflow: hidden; }
+  .erp-grid-toolbar { flex-wrap: wrap; gap: 8px; padding: 10px; }
+  .erp-grid-scroll { flex: none; height: auto; max-height: none; overflow-x: auto; overflow-y: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+  .erp-table :is(th, td) { height: 52px; padding: 8px 12px; }
+  .erp-pagination { flex-wrap: wrap; padding: 10px; gap: 10px; }
+  .erp-pagination .pages { flex-wrap: wrap; gap: 6px; justify-content: flex-start; }
+  .erp-pagination form { margin-left: 0; flex-wrap: wrap; }
+  .erp-pagination input { width: 64px; }
+  .erp-bottom-note { line-height: 1.6; font-size: 12px; }
+  .erp-dialog { width: calc(100vw - 16px); max-height: calc(100dvh - 24px); overflow-y: auto; }
+  .erp-dialog-heading { padding: 14px 16px; position: sticky; top: 0; z-index: 1; }
+  .erp-dialog-heading button { min-height: 44px; }
+  .erp-dialog-body { padding: 16px; }
+  .erp-dialog :is(button, input, select, textarea) { max-width: 100%; }
+  .login { margin: 32px auto; padding: 24px; }
+}
