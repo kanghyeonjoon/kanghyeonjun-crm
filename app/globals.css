@@ -541,3 +541,6 @@ p {
   .erp-bottom-note { display: block; }
   .erp-grid-toolbar::after { content: '표를 좌우로 밀어 모든 항목을 확인하세요'; flex-basis: 100%; color: #6b7280; font-size: 12px; }
 }
+@media (max-width: 760px) {
+  .erp-table.erp-sticky-actions:not(.diagnosis-table) > thead > tr > th:last-child { width: 146px; }
+}
