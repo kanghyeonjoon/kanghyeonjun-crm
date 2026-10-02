@@ -480,3 +480,15 @@ p {
     transition: none !important;
   }
 }
+
+.erp-table.diagnosis-table { min-width: 1250px; }
+.erp-table.diagnosis-table th:nth-child(1) { width: 55px; }
+.erp-table.diagnosis-table th:nth-child(2) { width: 115px; }
+.erp-table.diagnosis-table th:nth-child(3) { width: 130px; }
+.erp-table.diagnosis-table th:nth-child(4) { width: 220px; }
+.erp-table.diagnosis-table th:nth-child(5) { width: 90px; }
+.erp-table.diagnosis-table th:nth-child(6) { width: 175px; }
+.erp-table.diagnosis-table th:nth-child(7), .erp-table.diagnosis-table th:nth-child(8) { width: 125px; }
+.erp-table.diagnosis-table th:nth-child(9) { width: 110px; }
+.diagnosis-table .diagnosis-empty { height: 160px; text-align: center; color: var(--muted); }
+.diagnosis-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
