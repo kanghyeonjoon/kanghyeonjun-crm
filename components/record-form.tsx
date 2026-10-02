@@ -1,6 +1,6 @@
 "use client";
 import { useActionState, useEffect } from "react";
-import { saveRecord } from "@/app/workspace/actions";
+import { saveRecord } from "@/app/(crm)/workspace/actions";
 import {
   management,
   proposalStates,

@@ -1,6 +1,6 @@
 import { db } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { signout } from "@/app/login/actions";
+import { signout } from "@/app/(crm)/login/actions";
 export default async function Pending() {
   const client = await db();
   const {

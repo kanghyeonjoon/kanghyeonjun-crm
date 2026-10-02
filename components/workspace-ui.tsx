@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { signout } from "@/app/login/actions";
+import { signout } from "@/app/(crm)/login/actions";
 import { RecordForm } from "./record-form";
 import {
   management,
@@ -251,6 +251,7 @@ export function WorkspaceUI({
               <span className="erp-nav-count">{number(totals[i])}</span>
             </Link>
           ))}
+          <Link href="/workspace/diagnoses" title="무료진단 신청"><Icon type="proposals" /><span className="erp-nav-label">무료진단 신청</span></Link>
         </nav>
         <div className="erp-sidebar-bottom">
           <span className="erp-nav-label">병원 정보 · 제안서 · 영업</span>
