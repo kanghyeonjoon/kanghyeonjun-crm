@@ -16,6 +16,7 @@ export default function NativeDiagnosisForm(){
   try{
    const r=await fetch('/api/diagnosis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...values,requestId:requestId.current,consent:values.consent==='on'})});
    if(!r.ok){const data=await r.json();throw Error(data.error||'접수 중 문제가 발생했습니다.');}
+   try{sessionStorage.setItem('mongpd-native-received','yes');sessionStorage.removeItem('meta_lead_fired_at');}catch{}
    window.location.assign('/thanks?src=native');
   }catch(e){setError(e instanceof Error?e.message:'잠시 후 다시 시도해 주세요.');setBusy(false);}
  }

@@ -181,7 +181,7 @@ export const ANALYTICS = {
   clarityId: "y7gyxscspp",
   /**
    * Meta 픽셀(데이터 세트) ID — 전 페이지 PageView + /thanks 도착 시 Lead 1회.
-   * Lead는 Tally 제출 완료 리다이렉트(/thanks?src=tally)로만 발화합니다. 비우면 자동 비활성.
+   * Lead는 자체 폼 저장 성공 후 리다이렉트(/thanks?src=native)로만 발화합니다. 비우면 자동 비활성.
    */
   metaPixelId: "27166770068307",
 } as const;

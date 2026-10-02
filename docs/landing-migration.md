@@ -36,3 +36,14 @@ DIAGNOSIS_ALIMTALK_ENABLED=false
 - 운영 폼 접수까지 검증한 후 Vercel 도메인 이동, Gabia crm DNS 추가 및 Supabase 인증 URL 설정 필요.
 - 기존 시작 키트/결제/안내봇 API는 mongpd-web-three.vercel.app로 호환 연결. 관련 기존 프로젝트를 삭제하면 안 됨.
 - 홈페이지 분석 스크립트 보존. 신청서 진입은 전체 페이지 이동하여 추적 스크립트를 분리. 아직 운영 도메인 전환 안 함.
+
+## 2026-10-02 운영 전환 결과
+- 운영 배포 98d2062: dpl_4NKKfeAbe9e4pr7upZj89VqaNVrL READY (후속 전환 이벤트 보존 개선 포함 시 아래 기록 참고).
+- Resend mongpd.com 도메인 Verified. 발송용 API 키는 Vercel Production Secret에 저장.
+- 발신: 몽PD <hello@mongpd.com>. 관리자 수신 및 Reply-To: ekrk5614@gmail.com.
+- Production 이메일 활성화 설정, 알림톡 비활성. Preview에서는 코드 수준으로 외부 알림 차단.
+- Gabia DKIM TXT, rsend/send CNAME 및 crm CNAME 추가. 기존 @/www A 값 유지.
+- mongpd.com 및 www.mongpd.com을 기존 mongpd-web에서 CRM 프로젝트로 이동.
+- Preview 폼 3단계 제출 → DB 저장 → 기존 운영 로그인 세션에서 CRM 상세 조회 확인. 알림 3종 모두 pending 확인 후 해당 합성 테스트 1건만 정리, 신청 테이블 0건 확인.
+- 실제 이메일/알림톡 수신 테스트는 수행하지 않았음. 알림톡은 템플릿 승인 뒤 설정 필요.
+- 새 crm.mongpd.com은 기존 CRM 계정으로 다시 로그인해야 함(호스트별 세션).

@@ -6,12 +6,12 @@ import { trackMetaLead } from "@/lib/analytics";
 /**
  * Meta Lead 발화 — /thanks 전용.
  *
- * 발화 조건: Tally가 제출 "완료" 후 리다이렉트한 방문(?src=tally)일 때만 (qualified).
+ * 발화 조건: 자체 폼 저장 성공 후 세션 표식으로 확인된 방문일 때만 (qualified).
  * 직접 URL 입력·북마크 방문은 조건 미달로 아무것도 보내지 않습니다.
  *
  * 중복 방지 3중 장치:
  *  1) ref 가드 — React 개발 모드의 이펙트 2회 실행 흡수
- *  2) 발화 직후 history.replaceState로 ?src=tally 제거 — 새로고침해도 조건 미달
+ *  2) 발화 직후 history.replaceState로 ?src=native 제거 — 새로고침해도 조건 미달
  *  3) sessionStorage 플래그 — 뒤로가기/bfcache 복원까지 차단
  *     (탭 세션 기준이라, 나중에 새로 여는 진짜 재신청은 정상 집계됩니다)
  */
