@@ -34,7 +34,7 @@ DIAGNOSIS_ALIMTALK_ENABLED=false
 - 로컬 브라우저에서 3단계 입력 전환 확인. 실제 이메일/알림톡 발송 없음.
 - 서버 secret key를 Production 및 Preview에 저장 완료. Resend mongpd.com DNS 인증 진행 중.
 - 운영 폼 접수까지 검증한 후 Vercel 도메인 이동, Gabia crm DNS 추가 및 Supabase 인증 URL 설정 필요.
-- 기존 시작 키트/결제/안내봇 API는 mongpd-web-three.vercel.app로 호환 연결. 관련 기존 프로젝트를 삭제하면 안 됨.
+- 기존 시작 키트 화면은 mongpd-web-three.vercel.app으로 직접 리다이렉트하고 결제/안내봇 API는 원래 서버로 호환 연결. 관련 기존 프로젝트를 삭제하면 안 됨.
 - 홈페이지 분석 스크립트 보존. 신청서 진입은 전체 페이지 이동하여 추적 스크립트를 분리. 아직 운영 도메인 전환 안 함.
 
 ## 2026-10-02 운영 전환 결과

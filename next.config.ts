@@ -1,6 +1,5 @@
 import type {NextConfig} from "next";
-const config:NextConfig={poweredByHeader:false, async rewrites(){return [
- {source:"/kit/:path*",destination:"https://mongpd-web-three.vercel.app/kit/:path*"},
+const config:NextConfig={poweredByHeader:false, async redirects(){return [{source:"/kit",destination:"https://mongpd-web-three.vercel.app/kit",permanent:false},{source:"/kit/:path+",destination:"https://mongpd-web-three.vercel.app/kit/:path+",permanent:false}]}, async rewrites(){return [
  {source:"/api/chat",destination:"https://mongpd-web-three.vercel.app/api/chat"},
  {source:"/api/payments/:path*",destination:"https://mongpd-web-three.vercel.app/api/payments/:path*"},
  {source:"/api/kit-download",destination:"https://mongpd-web-three.vercel.app/api/kit-download"}
