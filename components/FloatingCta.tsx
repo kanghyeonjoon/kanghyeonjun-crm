@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+
 import { ArrowRight } from "lucide-react";
 import { CTA } from "@/config/site";
 import { trackCtaClick } from "@/lib/analytics";
@@ -51,7 +51,7 @@ export default function FloatingCta() {
     >
       {/* bob은 데스크톱에서만 — 모바일 전체폭 바가 흔들리면 산만합니다 */}
       <div className="w-full sm:w-auto sm:motion-safe:animate-[bob_3.2s_ease-in-out_infinite]">
-        <Link
+        <a
           href={CTA.href}
           onClick={() => trackCtaClick("float")}
           tabIndex={show ? 0 : -1}
@@ -65,7 +65,7 @@ export default function FloatingCta() {
             className="transition-transform group-hover:translate-x-1"
             aria-hidden="true"
           />
-        </Link>
+        </a>
       </div>
     </div>
   );

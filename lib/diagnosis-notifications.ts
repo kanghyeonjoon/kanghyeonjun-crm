@@ -3,6 +3,7 @@ import {diagnosisStore} from './diagnosis-store';
 import {receiptSubject,receiptText} from './diagnosis';
 export type DeliveryKind='applicant_email'|'admin_email'|'applicant_alimtalk';
 export function configured(kind:DeliveryKind){
+ if(process.env.VERCEL_ENV && process.env.VERCEL_ENV!=='production')return false;
  if(process.env.DIAGNOSIS_NOTIFICATIONS_ENABLED!=='true')return false;
  return kind==='applicant_alimtalk'
   ? process.env.DIAGNOSIS_ALIMTALK_ENABLED==='true'&&['SOLAPI_API_KEY','SOLAPI_API_SECRET','SOLAPI_PFID','SOLAPI_TEMPLATE_ID','SOLAPI_SENDER'].every(k=>!!process.env[k])

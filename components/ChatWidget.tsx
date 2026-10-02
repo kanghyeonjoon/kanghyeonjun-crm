@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+
 import { MessageCircleQuestion, Send, X } from "lucide-react";
 
 /**
@@ -138,9 +138,9 @@ export default function ChatWidget() {
             {capped ? (
               <div className="rounded-xl bg-accent-wash px-4 py-3 text-[13px] leading-relaxed text-ink-soft">
                 대화가 길어졌네요. 여기서부터는{" "}
-                <Link href="/diagnosis" className="font-black text-accent-deep underline">
+                <a href="/diagnosis" className="font-black text-accent-deep underline">
                   30분 무료진단
-                </Link>
+                </a>
                 에서 직접 짚어드리는 게 정확합니다.
               </div>
             ) : null}

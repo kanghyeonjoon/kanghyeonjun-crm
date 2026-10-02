@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+
 import { ArrowRight } from "lucide-react";
 import { CTA } from "@/config/site";
 import { trackCtaClick, type CtaLocation } from "@/lib/analytics";
@@ -36,7 +36,7 @@ export default function CtaButton({
     : "bg-accent text-white shadow-[0_10px_26px_rgba(36,86,216,.32)] hover:bg-accent-deep";
 
   return (
-    <Link
+    <a
       href={CTA.href}
       onClick={() => trackCtaClick(location)}
       className={`group inline-flex items-center justify-center gap-3 rounded-full font-black tracking-tight transition-colors duration-200 ${sizeClass} ${toneClass} ${className}`}
@@ -48,7 +48,7 @@ export default function CtaButton({
         className="transition-transform duration-200 group-hover:translate-x-1"
         aria-hidden="true"
       />
-    </Link>
+    </a>
   );
 }
 

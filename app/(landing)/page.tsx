@@ -1,3 +1,4 @@
+import LandingTelemetry from "@/components/LandingTelemetry";
 import Image from "next/image";
 import Link from "next/link";
 import { Check, ChevronRight, X } from "lucide-react";
@@ -112,7 +113,7 @@ export default function Home() {
     <>
       <StickyBanner />
 
-      <main className="flex-1">
+      <><LandingTelemetry /><main className="flex-1">
         {/* ══════════ [1] 히어로 ══════════ */}
         <section
           id="hero"
@@ -1135,7 +1136,7 @@ export default function Home() {
               화면 왼쪽 아래 플로팅 문의 버튼(FloatingContact)이 같은 채널을 이미 들고 있어
               마지막 화면에 같은 링크가 두 벌 쌓였습니다. CTA 직후엔 선택지를 늘리지 않는 게 낫습니다. */}
         </Block>
-      </main>
+      </main></>
 
       {/* ══════════ 푸터 — 다크, 회사 신원 ══════════ */}
       <footer className="bg-[#071022] px-6 py-10 text-center text-[12.5px] leading-[1.9] text-white/55">

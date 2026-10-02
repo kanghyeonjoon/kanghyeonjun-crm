@@ -32,7 +32,7 @@ DIAGNOSIS_ALIMTALK_ENABLED=false
 - 로컬 production build 성공, 기존 CRM DB 테스트와 신규 접수 RLS/중복/제한/동의 테스트 통과.
 - Supabase migration 20261002074002 적용. 접수 테이블 0건 및 RLS 활성화 확인.
 - 로컬 브라우저에서 3단계 입력 전환 확인. 실제 이메일/알림톡 발송 없음.
-- 서버 secret key 저장은 사용자 확인 대기. Resend 발신 주소/도메인 설정 대기.
+- 서버 secret key를 Production 및 Preview에 저장 완료. Resend mongpd.com DNS 인증 진행 중.
 - 운영 폼 접수까지 검증한 후 Vercel 도메인 이동, Gabia crm DNS 추가 및 Supabase 인증 URL 설정 필요.
 - 기존 시작 키트/결제/안내봇 API는 mongpd-web-three.vercel.app로 호환 연결. 관련 기존 프로젝트를 삭제하면 안 됨.
-- 분석 스크립트 재연결과 동의/개인정보 고지 최종 점검 필요. 아직 운영 도메인 전환 안 함.
+- 홈페이지 분석 스크립트 보존. 신청서 진입은 전체 페이지 이동하여 추적 스크립트를 분리. 아직 운영 도메인 전환 안 함.
