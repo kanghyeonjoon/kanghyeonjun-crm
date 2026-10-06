@@ -20,6 +20,6 @@ export async function saveColumn(form:FormData) {
  const {data,error}=await query.select('id').maybeSingle();
  if(error)return {ok:false,message:'저장하지 못했습니다. 잠시 후 다시 시도해 주세요.'};
  if(!data)return {ok:false,message:'다른 창에서 수정된 글입니다. 목록을 새로고침한 뒤 다시 열어 주세요.'};
- revalidatePath('/workspace/columns');revalidatePath('/columns');revalidatePath(`/columns/${data.id}`);
+ revalidatePath('/workspace/columns');revalidatePath('/columns');revalidatePath('/sitemap.xml');revalidatePath(`/columns/${data.id}`);
  return {ok:true,message:'저장했습니다.'};
 }

@@ -561,3 +561,13 @@ p {
 .columns-table th:nth-child(3) { width: 140px; }
 .columns-table th:nth-child(5) { width: 140px; }
 @media(max-width:760px){.column-editor {padding:16px;}.column-fields :is(input,select,textarea){font-size:16px;}.column-filters label {width:100%;}.columns-admin .erp-content{overflow:visible;}}
+
+.column-prose h3 { font-size: 1.2em; font-weight: 700; margin: 1.5em 0 .6em; }
+.column-prose :is(h2,h3) { scroll-margin-top: 80px; }
+.column-prose ul { list-style: disc; padding-left: 1.5em; margin: 1.2em 0; }
+.column-prose ol { list-style: decimal; padding-left: 1.5em; margin: 1.2em 0; }
+.column-prose li { margin: .45em 0; }
+.column-prose a { color: #1447e6; text-decoration: underline; overflow-wrap: anywhere; }
+.column-writing-guide { padding: 16px; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; }
+.column-writing-guide summary { cursor: pointer; font-weight: 700; }
+.column-writing-guide ul { padding-left: 20px; line-height: 1.8; }
