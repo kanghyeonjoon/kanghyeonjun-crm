@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 const db=new PGlite();
 await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;create schema crm_private;grant usage on schema crm_private to authenticated;create function crm_private.can_access(write_access boolean default false) returns boolean language sql stable as $$select current_setting('test.member',true)='yes' and (not write_access or current_setting('test.editor',true)='yes')$$;`);
 await db.exec(await fs.readFile('supabase/diagnosis-submissions.sql','utf8'));
+await db.exec(await fs.readFile('supabase/diagnosis-sms.sql','utf8'));
 const lead={source:'유튜브',name:'Local Test',email:'test@example.test',phone:'01000000000',reason:'Local test only',gender:'남자',age:'30대',channelUrl:'없음',consent:true,consent_version:'2026-10-02'};
 const id=i=>`11111111-1111-4111-8111-${String(i).padStart(12,'0')}`;
 async function submit(i,data=lead,ip='test-ip'){return (await db.query('select submit_diagnosis($1,$2,$3) as result',[id(i),data,ip])).rows[0].result;}
@@ -13,7 +14,7 @@ await assert.rejects(()=>db.query('select * from diagnosis_submissions'),/permis
 await db.exec('reset role;set role service_role');
 assert.equal((await submit(1)).created,true);
 assert.equal((await submit(1)).created,false);
-assert.equal((await db.query('select count(*)::int as n from diagnosis_notifications')).rows[0].n,3);
+assert.equal((await db.query('select count(*)::int as n from diagnosis_notifications')).rows[0].n,5);
 await assert.rejects(()=>submit(1,{...lead,name:'Changed'}),/idempotency_conflict/);
 for(let i=2;i<=5;i++)await submit(i);
 await assert.rejects(()=>submit(6),/rate_limited/);
