@@ -571,3 +571,28 @@ p {
 .column-writing-guide { padding: 16px; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; }
 .column-writing-guide summary { cursor: pointer; font-weight: 700; }
 .column-writing-guide ul { padding-left: 20px; line-height: 1.8; }
+/* Manual diagnosis scheduling */
+.diagnosis-editor {margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid #dbe1ea}
+.diagnosis-editor fieldset {border:0;padding:0;margin:0;display:grid;gap:14px;min-width:0}
+.diagnosis-editor label {display:grid;gap:7px;font-size:14px;font-weight:600}
+.diagnosis-editor :is(input,textarea,select),.diagnosis-week-nav input {width:100%;padding:10px;border:1px solid #ccd5e1;border-radius:8px;background:white;color:#172033;box-sizing:border-box}
+.diagnosis-editor textarea {resize:vertical}
+.diagnosis-time-fields {display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.diagnosis-week-nav {display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:20px 0}
+.diagnosis-week-nav h2 {font-size:20px;margin:0}
+.diagnosis-week {display:grid;grid-template-columns:repeat(7,minmax(150px,1fr));gap:10px;overflow-x:auto;padding-bottom:12px}
+.diagnosis-day {min-height:230px;background:#fff;border:1px solid #dce3ed;border-radius:12px;padding:12px}
+.diagnosis-day h3 {font-size:15px;border-bottom:1px solid #e3e8f0;margin:0 0 12px;padding-bottom:12px;display:flex;justify-content:space-between}
+.diagnosis-day .muted {font-size:12px}
+.diagnosis-event {display:flex;flex-direction:column;gap:8px;width:100%;text-align:left;border:1px solid #c6d7f7;background:#eef4ff;border-radius:8px;padding:12px;margin-bottom:10px;color:#203b68;cursor:pointer;overflow-wrap:anywhere}
+.diagnosis-event span,.diagnosis-event small {font-size:12px}
+.erp-table.diagnosis-table {min-width:1580px}
+.erp-table.diagnosis-table th:nth-child(3) {width:95px}
+.erp-table.diagnosis-table th:nth-child(4) {width:180px}
+.erp-table.diagnosis-table th:nth-child(5) {width:130px}
+.erp-table.diagnosis-table th:nth-child(6) {width:220px}
+.erp-table.diagnosis-table th:nth-child(7) {width:95px}
+.erp-table.diagnosis-table th:nth-child(8) {width:180px}
+.erp-table.diagnosis-table th:nth-child(9),.erp-table.diagnosis-table th:nth-child(10) {width:130px}
+.erp-table.diagnosis-table th:nth-child(11) {width:110px}
+@media(max-width:700px){.diagnosis-week {grid-template-columns:1fr;overflow:visible}.diagnosis-day{min-height:100px}.diagnosis-time-fields{grid-template-columns:1fr}.diagnosis-week-nav{align-items:stretch}.diagnosis-week-nav .erp-page-actions{flex-wrap:wrap}.diagnosis-event{min-height:90px}}
