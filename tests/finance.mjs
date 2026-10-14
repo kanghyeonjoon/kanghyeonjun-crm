@@ -1,0 +1,30 @@
+import {PGlite} from '@electric-sql/pglite';
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import {financeSchema,monthBounds} from '../lib/finance.ts';
+const db=new PGlite();
+await db.exec(`create role anon;create role authenticated;create schema auth;create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz);create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('test.uid',true),'')::uuid$$;grant usage on schema auth to authenticated;grant execute on function auth.uid() to authenticated;`);
+await db.exec(await fs.readFile('supabase/migrations/202609290001_crm.sql','utf8'));
+await db.exec(await fs.readFile('supabase/migrations/20261014151629_internal_finance.sql','utf8'));
+const owner='11111111-1111-4111-8111-111111111111',other='22222222-2222-4222-8222-222222222222',operator='33333333-3333-4333-8333-333333333333';
+await db.query('insert into auth.users(id) values($1),($2),($3)',[owner,other,operator]);await db.query("insert into crm_members(user_id,role) values($1,'owner'),($2,'owner'),($3,'operator')",[owner,other,operator]);
+await db.exec('set role anon');await assert.rejects(()=>db.query('select * from finance_entries'),/permission denied/);await assert.rejects(()=>db.query("select finance_month_summary('2026-10-01')"),/permission denied/);
+await db.exec('reset role;set role authenticated');await db.query("select set_config('test.uid',$1,false)",[owner]);
+async function add(id,amount,direction='income',day='2026-10-15'){return db.query('insert into finance_entries(id,amount,direction,occurred_on,category) values($1,$2,$3,$4,$5)',[id,amount,direction,day,'기타']);}
+await add(owner,100000);await add(other,30000,'expense');await add(operator,50000,'income','2026-11-01');
+const sum=async()=>(await db.query("select finance_month_summary('2026-10-01') s")).rows[0].s;
+assert.deepEqual(await sum(),{income:'100000',expense:'30000',count:'2'});
+await assert.rejects(()=>add(owner,100),/duplicate key/);
+await assert.rejects(()=>add('44444444-4444-4444-8444-444444444444',0),/check constraint/);
+await assert.rejects(()=>db.query('update finance_entries set owner_id=$1',[other]),/permission denied/);
+assert.equal((await db.query('update finance_entries set archived=true where id=$1 and version=1 returning version',[owner])).rows[0].version,2);
+assert.equal((await sum()).income,'0');
+assert.equal((await db.query('update finance_entries set amount=5 where id=$1 and version=1 returning id',[owner])).rows.length,0);
+await db.query('update finance_entries set archived=false where id=$1',[owner]);assert.equal((await sum()).income,'100000');
+await assert.rejects(()=>db.query('delete from finance_entries'),/permission denied/);
+for(const uid of [other,operator]){await db.query("select set_config('test.uid',$1,false)",[uid]);assert.equal((await db.query('select * from finance_entries')).rows.length,0);assert.equal((await sum()).income,'0');assert.equal((await db.query('update finance_entries set amount=10 returning id')).rows.length,0);}
+await assert.rejects(()=>add('44444444-4444-4444-8444-444444444444',100),/row-level security/);
+await db.exec('reset role');assert.equal((await db.query("select count(*)::int n from crm_audit where entity='finance_entries'")).rows[0].n,5);
+const valid={id:owner,occurred_on:'2026-10-15',direction:'income',amount:'100',category:'기타',counterparty:'',account_label:'',note:''};
+assert.equal(financeSchema.safeParse(valid).success,true);for(const patch of [{amount:'1.2'},{amount:'-1'},{amount:'1000000000001'},{occurred_on:'2026-02-30'},{category:'invalid'}])assert.equal(financeSchema.safeParse({...valid,...patch}).success,false);
+assert.equal(monthBounds('2026-12').end,'2027-01-01');await db.close();console.log('Finance: owner isolation, role denial, sums, archive/restore, concurrency, audit and validation passed');

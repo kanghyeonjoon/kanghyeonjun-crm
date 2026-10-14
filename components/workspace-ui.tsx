@@ -254,6 +254,7 @@ export function WorkspaceUI({
             </Link>
           ))}
           <Link href="/workspace/columns" title="칼럼 관리"><Icon type="proposals" /><span className="erp-nav-label">칼럼 관리</span></Link>
+          {role === "owner" && <Link href="/workspace/finance" title="재무 관리"><Icon type="proposals" /><span className="erp-nav-label">재무 관리</span></Link>}
           <Link href="/workspace/diagnoses" title="무료진단 신청"><Icon type="proposals" /><span className="erp-nav-label">무료진단 신청</span></Link>
         </nav>
         <div className="erp-sidebar-bottom">
