@@ -68,3 +68,14 @@ export async function executeFinance(connectionId:string,operation:string,input:
  return {ok:!failed&&!updated.error,message:failed?'일부 또는 전체 처리를 확인하지 못했습니다. 자동 재실행하지 않습니다. 그랜터에서 결과를 확인하세요.':updated.error?'그랜터가 요청을 수락했으나 이력 갱신에 실패했습니다. 다시 실행하지 말고 그랜터에서 확인하세요.':'그랜터가 요청을 수락했습니다. 조회 화면에서 반영 결과를 확인하세요. 발행은 국세청 처리 완료와 구분됩니다.',requestId};
  }catch(e){if(requestId){await diagnosisStore().from('granter_operations').update({state:e instanceof GranterError&&e.status&&e.status>=400&&e.status<500?'rejected':'uncertain',completed_at:new Date().toISOString()}).eq('id',requestId).eq('owner_id',user.id);return {ok:false,message:'처리를 완료했다고 확인할 수 없습니다. 자동 재시도하지 않습니다. 작업 이력과 그랜터를 확인하세요.',requestId};}return {ok:false,message:e instanceof GranterError?granterMessage(e):e instanceof Error?e.message:'실행하지 못했습니다.'};}
 }
+
+export async function readTicketDetail(connectionId:string,ticketId:number,ticketType:string){
+ const {connection}=await access(connectionId);
+ try{
+ if(!Number.isSafeInteger(ticketId)||ticketId<1||!Object.hasOwn(ticketTypes,ticketType))throw new GranterError('invalid_response');
+ const profile=await profileFor(connection);
+ const data=await readProvider(connection,'tickets/detail',{ticketId,ticketType}) as Record<string,unknown>;
+ if(!data||data.id!==ticketId||data.ticketType!==ticketType||data.workspaceId!==profile.workspaceId)throw new GranterError('workspace_mismatch');
+ return {ok:true,data:sanitizeProvider(data)};
+ }catch(e){return {ok:false,message:granterMessage(e)};}
+}
