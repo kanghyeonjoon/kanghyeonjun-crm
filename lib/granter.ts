@@ -34,6 +34,8 @@ export function granterMessage(e:unknown){
  if(e.code==='missing_key')return '서버 API 키 설정이 필요합니다.';
  if(e.status===401)return '그랜터 API 인증에 실패했습니다. LIVE API 키를 확인해 주세요.';
  if(e.status===403)return 'API 접근이 거부되었습니다. 그랜터 요금제와 API 사용 권한을 확인해 주세요.';
+ if(e.status===400)return '그랜터에서 조회·입력 조건을 거부했습니다. 대상과 날짜를 확인해 주세요. (400)';
+ if(e.status&&e.status>=500)return '그랜터 원본 서비스가 이 요청을 처리하지 못했습니다. 잠시 후 다시 확인해 주세요. ('+e.status+')';
  if(e.status===429)return '그랜터 조회 한도에 도달했습니다. 잠시 후 다시 조회해 주세요.';
  if(e.code==='invalid_response'||e.code==='workspace_mismatch')return '응답 형식 또는 회사 정보가 예상과 달라 표시를 중단했습니다.';
  return '그랜터 연결이 지연되거나 실패했습니다. 잠시 후 다시 조회해 주세요.';
