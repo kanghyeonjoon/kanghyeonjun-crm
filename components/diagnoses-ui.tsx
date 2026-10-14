@@ -49,7 +49,7 @@ export function DiagnosesUI({email, role, rows, total, page, size, query, failed
         <Link href="/workspace?tab=proposals" title="제안서"><FileText size={18}/><span className="erp-nav-label">제안서</span></Link>
         <Link href="/workspace?tab=opportunities" title="영업 진행"><ChartNoAxesCombined size={18}/><span className="erp-nav-label">영업 진행</span></Link>
         <Link href="/workspace/columns" title="칼럼 관리"><FileText size={18}/><span className="erp-nav-label">칼럼 관리</span></Link>
-        {role === "owner" && <Link href="/workspace/finance" title="재무 관리"><FileText size={18}/><span className="erp-nav-label">재무 관리</span></Link>}
+        {role === "owner" && <Link href="/workspace/finance/granter" title="재무 관리"><FileText size={18}/><span className="erp-nav-label">재무 관리</span></Link>}
         <Link href="/workspace/diagnoses" title="무료진단 신청" aria-current="page"><ClipboardList size={18}/><span className="erp-nav-label">무료진단 신청</span></Link>
       </nav>
       <div className="erp-sidebar-bottom"><span className="erp-nav-label">병원 정보 · 제안서 · 영업</span></div>

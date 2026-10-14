@@ -38,6 +38,7 @@ export function granterMessage(e:unknown){
  if(e.status&&e.status>=500)return '그랜터 원본 서비스가 이 요청을 처리하지 못했습니다. 잠시 후 다시 확인해 주세요. ('+e.status+')';
  if(e.status===429)return '그랜터 조회 한도에 도달했습니다. 잠시 후 다시 조회해 주세요.';
  if(e.code==='invalid_response'||e.code==='workspace_mismatch')return '응답 형식 또는 회사 정보가 예상과 달라 표시를 중단했습니다.';
+ if(e.status)return '그랜터가 이 요청을 처리하지 못했습니다. (서비스 응답 '+e.status+')';
  return '그랜터 연결이 지연되거나 실패했습니다. 잠시 후 다시 조회해 주세요.';
 }
 export function granterAmount(v:number|null,currency:string){if(v===null||!currency)return '확인 필요';return v.toLocaleString('ko-KR',{maximumFractionDigits:4})+' '+currency;}
