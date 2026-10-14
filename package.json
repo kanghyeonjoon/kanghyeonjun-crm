@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test": "node tests/database.mjs && node tests/diagnosis-database.mjs && node tests/columns-database.mjs && node tests/column-content.mjs && node tests/solapi.mjs && node tests/finance.mjs"
+    "test": "node tests/database.mjs && node tests/diagnosis-database.mjs && node tests/columns-database.mjs && node tests/column-content.mjs && node tests/solapi.mjs && node tests/finance.mjs && node tests/granter.mjs"
   },
   "engines": {
     "node": ">=24 <25"

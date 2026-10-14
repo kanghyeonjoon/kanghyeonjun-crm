@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {granterRead,normalizeProfile,normalizeAssets,normalizeTickets,granterMessage} from '../lib/granter.ts';
+process.env.GRANTER_API_KEY='synthetic-test-only';
+let calls=0;
+const mock=async(url,options)=>{calls++;assert.equal(url,'https://app.granter.biz/api/public-docs/assets');assert.equal(options.method,'POST');assert.equal(options.cache,'no-store');assert.equal(options.redirect,'error');assert.equal(options.headers.Authorization,'Basic '+Buffer.from('synthetic-test-only:').toString('base64'));return Response.json([]);};
+assert.deepEqual(await granterRead('assets',{assetType:'BANK_ACCOUNT'},mock),[]);
+await assert.rejects(()=>granterRead('tickets-refresh',{},mock));assert.equal(calls,1);
+const fail=await granterRead('assets',{},async()=>new Response('secret provider message',{status:401})).catch(e=>e);assert.equal(fail.message,'provider_error');assert.match(granterMessage(fail),/인증/);assert.equal(granterMessage(fail).includes('secret'),false);
+assert.throws(()=>normalizeProfile({workspaceId:1}),/invalid_response/);
+const asset={id:1,workspaceId:1,assetType:'BANK_ACCOUNT',name:'Test',isActive:true,number:'12345678',bankAccount:{currencyCode:'USD',accountBalance:150000,originalBalance:'100.25'}};
+const a=normalizeAssets([asset,asset],1);assert.equal(a.length,1);assert.equal(a[0].balance,100.25);assert.equal(a[0].number,'••••5678');assert.throws(()=>normalizeAssets([asset],2),/workspace_mismatch/);
+const ticket={id:1,workspaceId:1,ticketType:'BANK_TRANSACTION_TICKET',transactAt:'2026-10-15',transactionType:'OUT',amount:150000,bankTransaction:{originalAmount:'100',bankAccount:{currencyCode:'USD'}}};
+assert.equal(normalizeTickets([ticket,ticket],1)[0].amount,100);assert.equal(normalizeTickets([ticket,ticket],1).length,1);assert.throws(()=>normalizeTickets([ticket],2),/workspace_mismatch/);assert.throws(()=>normalizeTickets({},1),/invalid_response/);
+assert.equal(normalizeTickets([{...ticket,bankTransaction:null}],1)[0].amount,null);
+delete process.env.GRANTER_API_KEY;await assert.rejects(()=>granterRead('assets',{},mock),/missing_key/);
+console.log('Granter: endpoint allowlist, server auth, no-cache, sanitized errors, workspace isolation, currency normalization and dedup passed');
