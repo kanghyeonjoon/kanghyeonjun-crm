@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {profitDraft} from '../lib/granter-profit-draft.ts';
+const row=(id,type,amount,dir,sub,more={})=>({id,ticketType:type,amount,transactionType:dir,isIncluded:true,expenseCategory:{id,subInfo:sub,name:sub},...more});
+const bank='BANK_TRANSACTION_TICKET',card='EXPENSE_TICKET';
+const rows=[row(1,bank,1000,'IN','매출'),row(2,bank,100,'OUT','매출'),row(3,card,200,'OUT','판매비와 일반관리비'),row(4,bank,200,'OUT','판매비와 일반관리비',{ticketReferences:[{purpose:'DEDUPLICATE_CHECK_CARD_USAGE',targetType:card,targetId:3}]}),row(5,bank,4000,'IN','부채'),row(6,bank,70,'OUT',''),row(7,bank,20,'IN','영업외수익'),row(8,bank,10,'OUT','영업외비용'),row(9,bank,100,'OUT','판매관리비',{isIncluded:false})];
+const d=profitDraft({rows,categories:[]});assert.equal(d.totals.revenue,900);assert.equal(d.operating,700);assert.equal(d.pretax,710);assert.equal(d.duplicates,1);assert.equal(d.nonProfit,1);assert.equal(d.review.length,1);assert.equal(d.excludedCount,1);
+assert.equal(profitDraft({rows:[...rows,rows[0]],categories:[]}).totals.revenue,900);
+assert.equal(profitDraft({rows,categories:[]},[bank+':unknown']).totals.revenue,0);
+const different=structuredClone(rows);different[3].amount=300;assert.equal(profitDraft({rows:different,categories:[]}).duplicates,0);
+assert.equal(profitDraft({rows:[rows[0]],categories:[{id:1,subInfo:'자산'}]}).totals.revenue,0);
+assert.equal(profitDraft({rows:[row(10,bank,20,'IN','판관비')],categories:[]}).totals.operatingExpense,-20);
+console.log('Profit draft passed: sales refund, expense refund, exact linked check-card dedup, debt exclusion, unknowns, explicit inclusion, scope exclusion and authoritative categories');
