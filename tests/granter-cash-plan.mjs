@@ -8,3 +8,9 @@ assert.deepEqual(availableCash(1000,'200','100','50'),{available:650,shortfall:0
 assert.equal(availableCash(1000,'1200','0','0').shortfall,200);assert.equal(availableCash(1000,'1200','0','0').available,0);assert.equal(availableCash(-100,'0','0','0').shortfall,100);
 assert.equal(collectionState({isActive:true,scrapHistory:null}).tone,'neutral');assert.equal(collectionState({isActive:false}).tone,'warn');assert.equal(collectionState({scrapHistory:{lastCompletedAt:'2026-10-14',lastFailedAt:'2026-10-15'}}).tone,'warn');assert.equal(collectionState({scrapHistory:{lastCompletedAt:'2026-10-15',lastFailedAt:'2026-10-14'}}).tone,'good');
 console.log('Cash plan tests passed: currency/loan/securities exclusions, missing balance, input validation, shortfall and collection failures');
+
+assert.equal(availableCash(1000,'200','100','50','300').available,350);
+assert.equal(availableCash(1000,'800','0','0','400').shortfall,200);
+assert.equal(availableCash(1000,'200','0','0',''),null);
+assert.equal(availableCash(1000,'200','0','0','-1'),null);
+assert.equal(availableCash(1000,'200','0','0','100000000000001'),null);
