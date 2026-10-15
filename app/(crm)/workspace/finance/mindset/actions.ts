@@ -30,3 +30,11 @@ export async function readGoalBalance(){
  if(!r.ok||report?.effectiveEndDate!==today||typeof balance!=='number'||!Number.isFinite(balance))return {balance:null,today,message:'오늘 기준 잔액을 확인하지 못했습니다. 다시 조회해 주세요.'};
  return {balance,today,message:''};
 }
+
+export async function readCardPlan(){
+ const {client,user,role}=await requireMember();
+ if(role!=='owner'||user.email?.toLowerCase()!=='dkwk302@naver.com')return {ok:false as const,message:'연결 소유자만 조회할 수 있습니다.'};
+ const {data,error}=await client.from('finance_mindset').select('card_amount,card_month,card_paid').eq('owner_id',user.id).maybeSingle();
+ if(error||!data||!Number.isSafeInteger(data.card_amount)||data.card_amount<0)return {ok:false as const,message:'저장된 카드대금을 불러오지 못했습니다. 다시 조회해 주세요.'};
+ return {ok:true as const,amount:data.card_amount as number,month:data.card_month as string,paid:data.card_paid as boolean};
+}

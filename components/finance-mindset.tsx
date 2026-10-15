@@ -12,7 +12,7 @@ export default function FinanceMindset(){
  function load(){startTransition(async()=>{try{const r=await readMindset();if(r.ok){setDoc(r.data);setDraft(r.data);setMessage('');}else setMessage(r.message);}catch{setMessage('내용을 불러오지 못했습니다. 다시 시도해 주세요.');}});}
  useEffect(()=>{load();refresh();},[]);
  useEffect(()=>{if(!dirty)return;const warn=(e:BeforeUnloadEvent)=>{e.preventDefault();};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn);},[dirty]);
- function save(){if(!draft)return;startTransition(async()=>{try{const r=await saveMindset(draft);if(r.ok){setDoc(r.data);setDraft(r.data);setEditing(false);setMessage('저장했습니다. 다른 기기에서도 같은 계정으로 볼 수 있습니다.');}else setMessage(r.message);}catch{setMessage('저장하지 못했습니다. 작성 내용은 화면에 남아 있습니다. 다시 시도해 주세요.');}});}
+ function save(){if(!draft)return;startTransition(async()=>{try{const r=await saveMindset(draft);if(r.ok){setDoc(r.data);setDraft(r.data);setEditing(false);window.dispatchEvent(new Event('finance-card-updated'));setMessage('저장했습니다. 다른 기기에서도 같은 계정으로 볼 수 있습니다.');}else setMessage(r.message);}catch{setMessage('저장하지 못했습니다. 작성 내용은 화면에 남아 있습니다. 다시 시도해 주세요.');}});}
  if(!doc||!draft)return <section className="mm-loading" role="status">{message||'나의 문장을 불러오고 있습니다…'}{message&&<button className="g-button" disabled={pending} onClick={load}>다시 시도</button>}</section>;
  const progress=funds?goalProgress(funds.balance,doc,funds.today):null;
  const money=(n:number)=>n.toLocaleString('ko-KR')+'원';

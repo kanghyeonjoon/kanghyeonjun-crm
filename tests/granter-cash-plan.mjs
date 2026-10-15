@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {cashBasis,availableCash,collectionState} from '../lib/granter-cash-plan.ts';
+import {cashBasis,availableCash,collectionState,cashOutlook} from '../lib/granter-cash-plan.ts';
 const bank={assetType:'BANK_ACCOUNT',currencyCode:'KRW',isLoan:false,currentBalance:1000};
 assert.deepEqual(cashBasis({assets:[bank,{...bank,isLoan:true,currentBalance:9000},{...bank,currencyCode:'USD'},{...bank,assetType:'SECURITIES_ACCOUNT'}]}),{cash:1000,count:1,excluded:3});
 assert.equal(cashBasis({assets:[]}).cash,null);assert.equal(cashBasis({assets:[{...bank,currentBalance:null}]}).cash,null);
@@ -14,3 +14,9 @@ assert.equal(availableCash(1000,'800','0','0','400').shortfall,200);
 assert.equal(availableCash(1000,'200','0','0',''),null);
 assert.equal(availableCash(1000,'200','0','0','-1'),null);
 assert.equal(availableCash(1000,'200','0','0','100000000000001'),null);
+
+assert.deepEqual(cashOutlook(15575312,'2439490','','',''),{base:15575312,afterCard:13135822,afterLiving:null,spendable:null});
+assert.deepEqual(cashOutlook(15575312,'2439490','1000000','2000000','1500000'),{base:15575312,afterCard:13135822,afterLiving:12135822,spendable:8635822});
+assert.equal(cashOutlook(1000,'0','0','0','0').spendable,1000);
+assert.equal(cashOutlook(null,'0','0','0','0').spendable,null);
+assert.equal(cashOutlook(1000,'1200','0','0','0').spendable,-200);
