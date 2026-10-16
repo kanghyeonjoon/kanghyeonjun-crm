@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import FleetStatus from "./fleet-status";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { signout } from "@/app/(crm)/login/actions";
@@ -297,6 +298,7 @@ export function WorkspaceUI({
         </header>
         <main className="erp-content">
           <section className="erp-page">
+            {role === "owner" && <FleetStatus />}
             <div className="erp-page-heading">
               <div>
                 <h1>{tabs[tab]}</h1>
