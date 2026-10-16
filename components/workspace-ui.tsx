@@ -1,5 +1,5 @@
 "use client";
-import ContentNav from './content-nav';
+import WorkspaceNavigation from './workspace-navigation';
 import Link from "next/link";
 import WorkspaceNavIcon from "./workspace-nav-icon";
 import FleetStatus from "./fleet-status";
@@ -241,25 +241,7 @@ export function WorkspaceUI({
             <small>병원 영업 관리</small>
           </div>
         </div>
-        <nav aria-label="관리자 메뉴">
-          <div className="erp-group-label">CRM WORKSPACE</div>
-          {Object.entries(tabs).map(([key, label], i) => (
-            <Link
-              key={key}
-              href={`/workspace?tab=${key}`}
-              title={label}
-              aria-label={label}
-              aria-current={key === tab ? "page" : undefined}
-            >
-              <Icon type={key as Entity} />
-              <span className="erp-nav-label">{label}</span>
-              <span className="erp-nav-count">{number(totals[i])}</span>
-            </Link>
-          ))}
-          <Link href="/workspace/columns" title="칼럼 관리" aria-label="칼럼 관리"><WorkspaceNavIcon label="칼럼 관리" /><span className="erp-nav-label">칼럼 관리</span></Link>
-          {role === "owner" && <Link href="/workspace/finance/clobe" title="재무 관리" aria-label="재무 관리"><WorkspaceNavIcon label="재무 관리" /><span className="erp-nav-label">재무 관리</span></Link>}
-          <Link href="/workspace/diagnoses" title="무료진단 신청" aria-label="무료진단 신청"><WorkspaceNavIcon label="무료진단 신청" /><span className="erp-nav-label">무료진단 신청</span></Link>
-        <ContentNav/></nav>
+<WorkspaceNavigation role={role} counts={totals}/>
         <div className="erp-sidebar-bottom">
           <span className="erp-nav-label">병원 정보 · 제안서 · 영업</span>
         </div>

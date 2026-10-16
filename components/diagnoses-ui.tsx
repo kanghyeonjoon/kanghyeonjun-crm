@@ -1,5 +1,5 @@
 'use client';
-import ContentNav from './content-nav';
+import WorkspaceNavigation from './workspace-navigation';
 import Link from 'next/link';
 import WorkspaceNavIcon from './workspace-nav-icon';
 import { useRouter } from 'next/navigation';
@@ -46,14 +46,7 @@ export function DiagnosesUI({email, role, rows, total, page, size, query, failed
   return <div className="erp-admin">
     <aside className={`erp-sidebar ${collapsed ? 'is-collapsed' : ''}`}>
       <div className="erp-brand"><b className="erp-logo">H</b><div className="erp-nav-label"><strong>강현준 ERP</strong><small>병원 영업 관리</small></div></div>
-      <nav aria-label="관리자 메뉴"><div className="erp-group-label">CRM WORKSPACE</div>
-        <Link href="/workspace?tab=hospitals" title="병원 관리"><Building2 size={18}/><span className="erp-nav-label">병원 관리</span></Link>
-        <Link href="/workspace?tab=proposals" title="제안서"><FileText size={18}/><span className="erp-nav-label">제안서</span></Link>
-        <Link href="/workspace?tab=opportunities" title="영업 진행"><ChartNoAxesCombined size={18}/><span className="erp-nav-label">영업 진행</span></Link>
-        <Link href="/workspace/columns" title="칼럼 관리" aria-label="칼럼 관리"><WorkspaceNavIcon label="칼럼 관리"/><span className="erp-nav-label">칼럼 관리</span></Link>
-        {role === "owner" && <Link href="/workspace/finance/clobe" title="재무 관리" aria-label="재무 관리"><WorkspaceNavIcon label="재무 관리"/><span className="erp-nav-label">재무 관리</span></Link>}
-        <Link href="/workspace/diagnoses" title="무료진단 신청" aria-current="page"><WorkspaceNavIcon label="무료진단 신청"/><span className="erp-nav-label">무료진단 신청</span></Link>
-      <ContentNav/></nav>
+      <WorkspaceNavigation role={role}/>
       <div className="erp-sidebar-bottom"><span className="erp-nav-label">병원 정보 · 제안서 · 영업</span></div>
       <button className="erp-collapse" aria-label={collapsed ? '메뉴 펼치기' : '메뉴 접기'} onClick={() => {setCollapsed(!collapsed); try {localStorage.setItem('erp-menu-collapsed', String(!collapsed));} catch {}}}>{collapsed ? '»' : '«'}<span className="erp-nav-label">메뉴 접기</span></button>
     </aside>
