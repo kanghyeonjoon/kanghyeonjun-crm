@@ -3,15 +3,10 @@ import {z} from 'zod';
 const object=z.record(z.string(),z.unknown());
 export class GranterError extends Error {code:string;status?:number;constructor(code:string,status?:number){super(code);this.code=code;this.status=status;}}
 const endpoints=['workspace-profile','assets','tickets'] as const;
-export async function granterRead(endpoint:typeof endpoints[number],body?:Record<string,unknown>,fetcher:typeof fetch=fetch){
- if(!endpoints.includes(endpoint))throw new GranterError('invalid_endpoint');
- const key=process.env.GRANTER_API_KEY?.trim();if(!key)throw new GranterError('missing_key');
- try{
- const r=await fetcher('https://app.granter.biz/api/public-docs/'+endpoint,{method:endpoint==='workspace-profile'?'GET':'POST',headers:{Authorization:'Basic '+Buffer.from(key+':').toString('base64'),'Content-Type':'application/json'},body:endpoint==='workspace-profile'?undefined:JSON.stringify(body??{}),cache:'no-store',redirect:'error',signal:AbortSignal.timeout(15000)});
- if(!r.ok)throw new GranterError('provider_error',r.status);
- return await r.json() as unknown;
- }catch(e){if(e instanceof GranterError)throw e;throw new GranterError('connection_error');}
+export async function granterRead(endpoint:typeof endpoints[number],body?:Record<string,unknown>,fetcher:typeof fetch=fetch):Promise<unknown>{
+ throw new GranterError('disconnected');
 }
+
 const identifier=z.number().int().nonnegative();
 const profileSchema=z.object({workspaceId:identifier,companyName:z.string()});
 const assetSchema=z.object({id:identifier,workspaceId:identifier,assetType:z.string(),name:z.string(),nickname:z.string().nullish(),organizationName:z.string().nullish(),number:z.string().nullish(),isActive:z.boolean(),isHidden:z.boolean().optional(),bankAccount:object.nullish(),securitiesAccount:object.nullish(),scrapHistory:object.nullish()});

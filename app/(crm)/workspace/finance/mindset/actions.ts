@@ -1,7 +1,7 @@
 'use server';
 import {requireMember} from '@/lib/access';
 import {z} from 'zod';
-import {readFinance} from '../granter/actions';
+import {readClobe} from '../clobe/actions';
 const fields='beliefs,letter,version,updated_at,goal_amount,goal_date,card_amount,card_month,card_paid';
 type Doc={beliefs:string[],letter:string,version:number,updated_at:string,goal_amount:number,goal_date:string,card_amount:number,card_month:string,card_paid:boolean};
 const schema=z.object({beliefs:z.array(z.string().trim().min(1).max(1000)).min(1).max(50),letter:z.string().trim().min(1).max(20000),version:z.number().int().positive(),goal_amount:z.number().int().min(1).max(1e12),goal_date:z.iso.date(),card_amount:z.number().int().min(0).max(1e12),card_month:z.string().regex(/^20\d{2}-(0[1-9]|1[0-2])$/),card_paid:z.boolean()});
@@ -23,12 +23,8 @@ export async function saveMindset(input:unknown){
 }
 
 export async function readGoalBalance(){
- const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Seoul'});
- const r=await readFinance({view:'daily',month:today.slice(0,7),connection:'primary'});
- const report=r.data as {effectiveEndDate?:string,total?:{currentBalance?:number}}|undefined;
- const balance=report?.total?.currentBalance;
- if(!r.ok||report?.effectiveEndDate!==today||typeof balance!=='number'||!Number.isFinite(balance))return {balance:null,today,message:'오늘 기준 잔액을 확인하지 못했습니다. 다시 조회해 주세요.'};
- return {balance,today,message:''};
+ const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Seoul'});const r=await readClobe();
+ return {balance:r.ok?r.balance:null,today,message:r.ok?'':r.message};
 }
 
 export async function readCardPlan(){
