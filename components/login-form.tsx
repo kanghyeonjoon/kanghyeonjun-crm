@@ -1,6 +1,6 @@
 "use client";
 import { useActionState } from "react";
-import { authenticate } from "@/app/login/actions";
+import { authenticate } from "@/app/(crm)/login/actions";
 export function LoginForm() {
   const [message, action, pending] = useActionState(authenticate, "");
   return (

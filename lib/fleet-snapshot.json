@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-10-16T07:30:50.688011+00:00",
+  "nodes": [
+    {
+      "id": "codex-crm-worker",
+      "name": "맥미니 · CRM",
+      "observedAt": "2026-10-16T07:30:50.688011+00:00",
+      "queue": 0,
+      "running": 0,
+      "completed": 0,
+      "failed": 0,
+      "note": "수신기 작업 기록 기준. 앱·원격 연결 정상 여부는 미확인."
+    },
+    {
+      "id": "codex-content-worker",
+      "name": "맥미니 · 콘텐츠",
+      "observedAt": "2026-09-23T21:02:38+09:00",
+      "queue": null,
+      "running": null,
+      "completed": null,
+      "failed": null,
+      "note": "원격 상태 수집 미연결. 현재 작업 수를 확인할 수 없습니다."
+    },
+    {
+      "id": "third-mac-mini",
+      "name": "맥미니 · 영상",
+      "observedAt": null,
+      "queue": null,
+      "running": null,
+      "completed": null,
+      "failed": null,
+      "note": "원격 상태 수집 미연결. 현재 작업 수를 확인할 수 없습니다."
+    }
+  ]
+}

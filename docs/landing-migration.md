@@ -1,0 +1,49 @@
+# 몽PD 랜딩 / CRM 통합
+
+목표 도메인: mongpd.com(랜딩), crm.mongpd.com(CRM).
+현재 원본 랜딩: kanghyeonjoon/mongpd-web main. 기존 CRM 코드: codex/app-foundation 7cefdd4.
+
+## 구현
+- 동일 Next.js 앱 안에서 랜딩과 인증된 CRM을 라우트 그룹으로 분리.
+- /diagnosis 자체 3단계 신청서: 기존 Tally의 9개 문항 반영.
+- 접수와 알림 작업 3종을 DB 트랜잭션으로 저장. 요청 ID 기반 중복 방지, IP 해시 기준 시간당 5건 제한.
+- CRM 회원만 /workspace/diagnoses에서 조회. 외부 익명 조회·수정 불가.
+- 관리자 이메일: ekrk5614@gmail.com. 신청자 접수 확인 + 관리자 이메일.
+- 알림톡은 승인된 몽PD 템플릿이 없어 기본 비활성. SMS 대체 발송 없음.
+- 전송 결과 accepted는 업체 접수 의미이며 실제 수신 완료가 아님. uncertain은 수동 확인, 자동 재전송하지 않음.
+
+## 운영 연결에 필요한 서버 전용 환경변수
+SUPABASE_SECRET_KEY (또는 SUPABASE_SERVICE_ROLE_KEY)
+RESEND_API_KEY
+MAIL_FROM (인증된 몽PD 발신 주소)
+DIAGNOSIS_ADMIN_EMAIL=ekrk5614@gmail.com
+DIAGNOSIS_NOTIFICATIONS_ENABLED=true (발신자 설정·검증 후)
+DIAGNOSIS_ALIMTALK_ENABLED=false
+
+알림톡 승인 후 SOLAPI_API_KEY, SOLAPI_API_SECRET, SOLAPI_PFID, SOLAPI_TEMPLATE_ID, SOLAPI_SENDER 설정. 템플릿 변수는 현재 #{이름}. 실제 승인된 템플릿 변수와 일치하도록 검증한 뒤 활성화.
+
+## 알림톡 심사 문안 초안 (미제출)
+#{이름}님, 몽PD 무료진단 신청이 접수되었습니다.
+신청 내용을 검토한 뒤 선정 및 일정 안내를 위해 연락드리겠습니다.
+접수만으로 진단 일정이 확정되는 것은 아닙니다.
+문의: ekrk5614@gmail.com
+
+## 검증 및 남은 작업
+- 로컬 production build 성공, 기존 CRM DB 테스트와 신규 접수 RLS/중복/제한/동의 테스트 통과.
+- Supabase migration 20261002074002 적용. 접수 테이블 0건 및 RLS 활성화 확인.
+- 로컬 브라우저에서 3단계 입력 전환 확인. 실제 이메일/알림톡 발송 없음.
+- 서버 secret key를 Production 및 Preview에 저장 완료. Resend mongpd.com DNS 인증 진행 중.
+- 운영 폼 접수까지 검증한 후 Vercel 도메인 이동, Gabia crm DNS 추가 및 Supabase 인증 URL 설정 필요.
+- 기존 시작 키트 화면은 mongpd-web-three.vercel.app으로 직접 리다이렉트하고 결제/안내봇 API는 원래 서버로 호환 연결. 관련 기존 프로젝트를 삭제하면 안 됨.
+- 홈페이지 분석 스크립트 보존. 신청서 진입은 전체 페이지 이동하여 추적 스크립트를 분리. 아직 운영 도메인 전환 안 함.
+
+## 2026-10-02 운영 전환 결과
+- 운영 배포 98d2062: dpl_4NKKfeAbe9e4pr7upZj89VqaNVrL READY (후속 전환 이벤트 보존 개선 포함 시 아래 기록 참고).
+- Resend mongpd.com 도메인 Verified. 발송용 API 키는 Vercel Production Secret에 저장.
+- 발신: 몽PD <hello@mongpd.com>. 관리자 수신 및 Reply-To: ekrk5614@gmail.com.
+- Production 이메일 활성화 설정, 알림톡 비활성. Preview에서는 코드 수준으로 외부 알림 차단.
+- Gabia DKIM TXT, rsend/send CNAME 및 crm CNAME 추가. 기존 @/www A 값 유지.
+- mongpd.com 및 www.mongpd.com을 기존 mongpd-web에서 CRM 프로젝트로 이동.
+- Preview 폼 3단계 제출 → DB 저장 → 기존 운영 로그인 세션에서 CRM 상세 조회 확인. 알림 3종 모두 pending 확인 후 해당 합성 테스트 1건만 정리, 신청 테이블 0건 확인.
+- 실제 이메일/알림톡 수신 테스트는 수행하지 않았음. 알림톡은 템플릿 승인 뒤 설정 필요.
+- 새 crm.mongpd.com은 기존 CRM 계정으로 다시 로그인해야 함(호스트별 세션).

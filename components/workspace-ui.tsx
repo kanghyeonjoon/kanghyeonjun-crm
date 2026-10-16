@@ -1,9 +1,13 @@
 "use client";
+import WorkspaceNavigation from './workspace-navigation';
 import Link from "next/link";
+import WorkspaceNavIcon from "./workspace-nav-icon";
+import FleetStatus from "./fleet-status";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { signout } from "@/app/login/actions";
+import { signout } from "@/app/(crm)/login/actions";
 import { RecordForm } from "./record-form";
+import type { HospitalChoice } from "@/lib/hospital-choice";
 import {
   management,
   proposalStates,
@@ -55,7 +59,7 @@ export function WorkspaceUI({
   email: string;
   role: string;
   rows: Row[];
-  hospitals: { id: string; name: string }[];
+  hospitals: HospitalChoice[];
   total: number;
   totals: number[];
   page: number;
@@ -122,7 +126,9 @@ export function WorkspaceUI({
       timer = setTimeout(
         () =>
           setFit(
-            Math.max(1, Math.min(100, Math.floor((el.clientHeight - 38) / 40))),
+            window.matchMedia("(max-width: 760px)").matches
+              ? 20
+              : Math.max(1, Math.min(100, Math.floor((el.clientHeight - 38) / 40))),
           ),
         100,
       );
@@ -236,22 +242,7 @@ export function WorkspaceUI({
             <small>병원 영업 관리</small>
           </div>
         </div>
-        <nav aria-label="관리자 메뉴">
-          <div className="erp-group-label">CRM WORKSPACE</div>
-          {Object.entries(tabs).map(([key, label], i) => (
-            <Link
-              key={key}
-              href={`/workspace?tab=${key}`}
-              title={label}
-              aria-label={label}
-              aria-current={key === tab ? "page" : undefined}
-            >
-              <Icon type={key as Entity} />
-              <span className="erp-nav-label">{label}</span>
-              <span className="erp-nav-count">{number(totals[i])}</span>
-            </Link>
-          ))}
-        </nav>
+<WorkspaceNavigation role={role} counts={totals}/>
         <div className="erp-sidebar-bottom">
           <span className="erp-nav-label">병원 정보 · 제안서 · 영업</span>
         </div>
@@ -292,6 +283,7 @@ export function WorkspaceUI({
         </header>
         <main className="erp-content">
           <section className="erp-page">
+            {role === "owner" && <FleetStatus />}
             <div className="erp-page-heading">
               <div>
                 <h1>{tabs[tab]}</h1>
@@ -511,7 +503,7 @@ export function WorkspaceUI({
                   현재 페이지 CSV ↓
                 </button>
               </div>
-              <div className="erp-grid-scroll" ref={grid}>
+              <div className="erp-grid-scroll" ref={grid} role="region" aria-label="조회 결과 표, 좌우로 스크롤 가능" tabIndex={0}>
                 <table className="erp-table erp-sticky-actions">
                   <thead>
                     <tr>

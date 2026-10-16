@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import {PGlite} from '@electric-sql/pglite';
+import {validateOperation,sanitizeProvider,csvCell} from '../lib/granter-validation.ts';
+import {cashSeries,forecast,groupedFlows,auditRows} from '../lib/granter-analytics.ts';
+import {operations} from '../lib/granter-catalog.ts';
+assert.equal(operations.length,28);
+assert.throws(()=>validateOperation('post-tags',{name:'Test',injected:true}));
+assert.throws(()=>validateOperation('post-tags',{}));
+assert.equal(validateOperation('post-tags',{name:'Test'}).payload.name,'Test');
+assert.throws(()=>validateOperation('delete-manual-transactions',{ticketIds:[1,1]}));
+assert.throws(()=>validateOperation('post-ticket-references',{targets:[{id:1,type:'BANK_TRANSACTION_TICKET'},{id:1,type:'BANK_TRANSACTION_TICKET'}]}));
+assert.throws(()=>validateOperation('post-bank-transactions',{bankAccountId:1,bankTransactions:[{transactAt:'2026-10-15',transactionType:'OUT',content:'Test',amount:-10}]}));
+assert.throws(()=>validateOperation('post-cash-receipts-issue',{homeTaxAccountId:1,transactAt:'2026-10-15T09:00:00',content:'Test',usage:'EXPENSE_PROOF',taxationType:'TAXABLE',totalAmount:110,supplyValue:100,vat:9,serviceFee:0,issuer:{registrationNumber:'123',companyName:'Test'},buyer:{identityNumber:'123'}}));
+const clean=sanitizeProvider({password:'secret',identityNumber:'123',nested:{token:'secret',cardNumber:'1234567890',name:'ok'}});assert.deepEqual(clean,{nested:{cardNumber:'••••7890',name:'ok'}});
+assert.equal(csvCell('=HYPERLINK("bad")'),'"\'=HYPERLINK(""bad"")"');
+const report={startDate:'2026-10-01',effectiveEndDate:'2026-10-10',total:{currentBalance:1000,inAmount:500,outAmount:300},assets:[{isLoan:false,balances:[{baseDate:'2026-10-01',accountBalance:1000}]},{isLoan:true,balances:[{baseDate:'2026-10-01',accountBalance:9000}]}]};
+assert.equal(cashSeries(report)[0].value,1000);assert.equal(forecast(report,30).projected,1600);assert.equal(forecast({...report,total:{...report.total,outAmount:-300}},30).projected,1600);assert.equal(forecast({...report,effectiveEndDate:'2026-10-02'},30),null);
+const rows=[{amount:100,transactionType:'OUT',expenseCategory:{name:'식비'}},{amount:500,transactionType:'OUT',isIncluded:false},{amount:50,transactionType:'IN'}];assert.equal(groupedFlows(rows,'category').reduce((s,r)=>s+r.expense,0),100);
+assert.equal(auditRows([{id:1,ticketType:'TAX_INVOICE_TICKET',isConnected:false,transactAt:'2026-08-01'}],'2026-10-15').length,1);
+const db=new PGlite();await db.exec('create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key);');await db.exec(await fs.readFile('supabase/migrations/20261014154100_granter_operations.sql','utf8'));const uid='11111111-1111-4111-8111-111111111111';await db.query('insert into auth.users values($1)',[uid]);
+for(const role of ['anon','authenticated']){await db.exec('set role '+role);await assert.rejects(()=>db.query('select * from granter_operations'),/permission denied/);await assert.rejects(()=>db.query("insert into granter_operations(id,owner_id,connection,workspace_id,operation,fingerprint) values($1,$1,'primary',1,'post-tags','x')",[uid]),/permission denied/);await db.exec('reset role');}
+await db.exec('set role service_role');await db.query("insert into granter_operations(id,owner_id,connection,workspace_id,operation,fingerprint) values($1,$1,'primary',1,'post-tags','x')",[uid]);await assert.rejects(()=>db.query("insert into granter_operations(id,owner_id,connection,workspace_id,operation,fingerprint) values('22222222-2222-4222-8222-222222222222',$1,'primary',1,'post-tags','x')",[uid]),/duplicate key/);await assert.rejects(()=>db.query("delete from granter_operations"),/permission denied/);await db.close();console.log('Granter dashboard: validation, financial totals, loan isolation, forecast bounds, sanitization, CSV safety, service-only history and replay reservation passed');

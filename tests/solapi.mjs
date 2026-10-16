@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {solapiReceipt,solapiHeaders,sendSolapi} from '../lib/solapi.ts';
+process.env.SOLAPI_API_KEY='dummy';process.env.SOLAPI_API_SECRET='test-secret';
+assert.match(solapiHeaders().Authorization,/^HMAC-SHA256 apiKey=dummy, date=.+, salt=[a-f0-9]{32}, signature=[a-f0-9]{64}$/);
+const accepted={failedMessageList:[],groupInfo:{groupId:'test-group',count:{registeredSuccess:1}}};
+assert.equal(solapiReceipt(accepted),'test-group');
+for(const v of [{},null,{...accepted,failedMessageList:[{statusCode:'fail'}]},{failedMessageList:[],groupInfo:{groupId:'g',count:{registeredSuccess:0}}}])assert.throws(()=>solapiReceipt(v));
+let calls=0;
+globalThis.fetch=async(url,opts)=>{calls++;assert.equal(url,'https://api.solapi.com/messages/v4/send-many/detail');const b=JSON.parse(opts.body);assert.equal(b.messages.length,1);assert.equal(b.allowDuplicates,false);return new Response(JSON.stringify(accepted));};
+assert.equal(await sendSolapi({to:'01000000000',text:'local mock'}),'test-group');assert.equal(calls,1);
+globalThis.fetch=async()=>{calls++;throw Error('timeout')};await assert.rejects(()=>sendSolapi({}));assert.equal(calls,2);
+console.log('PASS: SOLAPI signing, explicit acceptance, failure rejection and no automatic retry (mock only)');

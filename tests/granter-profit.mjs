@@ -1,0 +1,6 @@
+import assert from 'node:assert/strict';
+import {emptyProfit,profitMetrics} from '../lib/granter-profit.ts';
+const p={...emptyProfit,revenue:'1000',cost:'200',operatingExpense:'300',otherIncome:'20',otherExpense:'70',tax:'50',liabilities:'600',equity:'400',capital:'100',capitalSurplus:'50',retainedEarnings:'150'};
+const m=profitMetrics(p,'corporation');assert.equal(m.operating,500);assert.equal(m.pretax,450);assert.equal(m.net,400);assert.equal(m.margin,50);assert.equal(m.netMargin,40);assert.equal(m.debtRatio,150);assert.equal(m.reserveRatio,200);
+assert.equal(profitMetrics(emptyProfit,'corporation').net,null);assert.equal(profitMetrics({...p,tax:''},'corporation').net,null);assert.equal(profitMetrics({...p,equity:'0'},'corporation').debtRatio,null);assert.equal(profitMetrics({...p,equity:'-1'},'corporation').debtRatio,null);assert.equal(profitMetrics({...p,revenue:'0'},'corporation').margin,null);assert.equal(profitMetrics(p,'individual').reserveRatio,null);assert.equal(profitMetrics({...p,retainedEarnings:'-200'},'corporation').reserveRatio,-150);
+console.log('Profit tests passed: formulas, missing tax, zero/negative denominators, negative retained earnings, individual business applicability');

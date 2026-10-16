@@ -1,0 +1,39 @@
+import 'server-only';
+import {createHash,randomBytes,createCipheriv,createDecipheriv} from 'node:crypto';
+import {diagnosisStore} from './diagnosis-store';
+export const CLOBE_COMPANY='34f2oajQTT1p9HEI3CcUG';
+export const CLOBE_RESOURCE='https://api.clobe.ai/mcp';
+export const CLOBE_CALLBACK='https://crm.mongpd.com/workspace/finance/clobe/callback';
+type Tokens={access_token:string,refresh_token?:string,client_id:string};
+function key(){const k=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY;if(!k)throw new Error('연결 저장 설정을 확인해 주세요.');return createHash('sha256').update('mongpd-clobe-credentials-v1:'+k).digest();}
+export function seal(value:unknown){const iv=randomBytes(12),cipher=createCipheriv('aes-256-gcm',key(),iv);const data=Buffer.concat([cipher.update(JSON.stringify(value),'utf8'),cipher.final()]);return Buffer.concat([iv,cipher.getAuthTag(),data]).toString('base64');}
+export function unseal<T>(value:string):T{const data=Buffer.from(value,'base64'),dec=createDecipheriv('aes-256-gcm',key(),data.subarray(0,12));dec.setAuthTag(data.subarray(12,28));return JSON.parse(Buffer.concat([dec.update(data.subarray(28)),dec.final()]).toString());}
+export const hash=(s:string)=>createHash('sha256').update(s).digest('hex');
+async function request(url:string,init:RequestInit){const r=await fetch(url,{...init,cache:'no-store',redirect:'error',signal:AbortSignal.timeout(25000)});if(!r.ok)throw new Error(r.status===401?'클로브 연결을 다시 승인해 주세요.':'클로브 요청을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.');return r;}
+export async function exchange(body:Record<string,string>){const r=await request('https://api.clobe.ai/oauth/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({...body,resource:CLOBE_RESOURCE})});const t=await r.json();if(typeof t.access_token!=='string'||typeof t.expires_in!=='number'||t.expires_in<=0)throw new Error('인증 응답을 확인할 수 없습니다.');return t as {access_token:string,refresh_token?:string,expires_in:number};}
+export async function beginClobe(owner:string){
+ const r=await request('https://api.clobe.ai/oauth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_name:'몽PD CRM 재무 조회',redirect_uris:[CLOBE_CALLBACK],grant_types:['authorization_code','refresh_token'],response_types:['code'],token_endpoint_auth_method:'none',scope:'mcp offline_access'})});const client=await r.json();if(typeof client.client_id!=='string')throw new Error('클로브 연결 등록을 완료하지 못했습니다.');
+ const state=randomBytes(32).toString('base64url'),verifier=randomBytes(32).toString('base64url');const {error}=await diagnosisStore().from('clobe_oauth_states').insert({state_hash:hash(state),owner_id:owner,payload:seal({client_id:client.client_id,verifier}),expires_at:new Date(Date.now()+600000).toISOString()});if(error)throw new Error('연결 요청을 저장하지 못했습니다.');
+ const url=new URL('https://api.clobe.ai/oauth/authorize');url.search=new URLSearchParams({response_type:'code',client_id:client.client_id,redirect_uri:CLOBE_CALLBACK,scope:'mcp offline_access',state,code_challenge:createHash('sha256').update(verifier).digest('base64url'),code_challenge_method:'S256',resource:CLOBE_RESOURCE}).toString();return {url:url.toString(),state};
+}
+async function parseRpc(r:Response,id:number){const raw=await r.text();const messages=raw.trim().startsWith('{')?[JSON.parse(raw)]:raw.split(/\r?\n\r?\n/).flatMap(chunk=>{const data=chunk.split(/\r?\n/).filter(l=>l.startsWith('data:')).map(l=>l.slice(5).trim()).join('\n');if(!data)return [];try{return [JSON.parse(data)];}catch{return [];}});const msg=messages.find(m=>m.id===id);if(!msg||msg.error)throw new Error('클로브 조회 응답을 확인할 수 없습니다.');return msg.result;}
+export async function clobeTools(token:string,names:string[]){
+ const allowed=['get_my_context','get_bank_accounts','get_security_accounts','get_scraping_status'];if(names.some(n=>!allowed.includes(n)))throw new Error('허용되지 않은 조회입니다.');
+ const headers:Record<string,string>={Authorization:`Bearer ${token}`,'Content-Type':'application/json',Accept:'application/json, text/event-stream'};
+ const init=await request(CLOBE_RESOURCE,{method:'POST',headers,body:JSON.stringify({jsonrpc:'2.0',id:1,method:'initialize',params:{protocolVersion:'2025-06-18',capabilities:{},clientInfo:{name:'mongpd-crm',version:'1.0.0'}}})});const session=init.headers.get('mcp-session-id');const initialized=await parseRpc(init,1);headers['MCP-Protocol-Version']=initialized.protocolVersion||'2025-06-18';if(session)headers['Mcp-Session-Id']=session;
+ await request(CLOBE_RESOURCE,{method:'POST',headers,body:JSON.stringify({jsonrpc:'2.0',method:'notifications/initialized'})});
+ try{return await Promise.all(names.map(async(name,i)=>{const r=await request(CLOBE_RESOURCE,{method:'POST',headers,body:JSON.stringify({jsonrpc:'2.0',id:i+2,method:'tools/call',params:{name,arguments:{input:name==='get_my_context'?{}:{companyId:CLOBE_COMPANY}}}})});const result=await parseRpc(r,i+2);if(result.isError)throw new Error('클로브 조회 권한 또는 수집 상태를 확인해 주세요.');const content=result.structuredContent||JSON.parse(result.content.find((c:{type:string})=>c.type==='text').text);return content;}));}finally{if(session)await fetch(CLOBE_RESOURCE,{method:'DELETE',headers,cache:'no-store',redirect:'error',signal:AbortSignal.timeout(5000)}).catch(()=>{});}
+}
+export async function finishClobe(owner:string,state:string,code:string){
+ const db=diagnosisStore();const {data,error}=await db.from('clobe_oauth_states').update({consumed:true}).eq('state_hash',hash(state)).eq('owner_id',owner).eq('consumed',false).gt('expires_at',new Date().toISOString()).select('payload').maybeSingle();if(error||!data)throw new Error('연결 요청이 만료되었습니다. 다시 연결해 주세요.');
+ const pending=unseal<{client_id:string,verifier:string}>(data.payload);const t=await exchange({grant_type:'authorization_code',client_id:pending.client_id,code,redirect_uri:CLOBE_CALLBACK,code_verifier:pending.verifier});
+ const [context]=await clobeTools(t.access_token,['get_my_context']);const company=context.companies?.find((c:{companyId:string})=>c.companyId===CLOBE_COMPANY);if(!company)throw new Error('비즈니스아나토미 회사 접근 권한이 필요합니다.');
+ const saved=await db.from('clobe_connections').upsert({owner_id:owner,company_id:company.companyId,company_name:company.companyName,credential:seal({...t,client_id:pending.client_id}),expires_at:new Date(Date.now()+t.expires_in*1000).toISOString(),refresh_lock:null,updated_at:new Date().toISOString()});if(saved.error)throw new Error('연결 정보를 저장하지 못했습니다.');
+}
+export async function clobeToken(owner:string){
+ const db=diagnosisStore();const {data,error}=await db.from('clobe_connections').select('*').eq('owner_id',owner).maybeSingle();if(error||!data)throw new Error('클로브 계정 연결이 필요합니다.');if(data.company_id!==CLOBE_COMPANY)throw new Error('연결 회사를 확인해 주세요.');const tokens=unseal<Tokens>(data.credential);
+ if(Date.parse(data.expires_at)>Date.now()+60000)return tokens.access_token;
+ if(!tokens.refresh_token)throw new Error('클로브 연결을 다시 승인해 주세요.');
+ const lock=new Date().toISOString();const acquired=await db.from('clobe_connections').update({refresh_lock:lock}).eq('owner_id',owner).or(`refresh_lock.is.null,refresh_lock.lt.${new Date(Date.now()-60000).toISOString()}`).select('owner_id').maybeSingle();if(acquired.error||!acquired.data)throw new Error('클로브 인증을 갱신하고 있습니다. 잠시 후 다시 조회해 주세요.');
+ try{const t=await exchange({grant_type:'refresh_token',client_id:tokens.client_id,refresh_token:tokens.refresh_token});const saved=await db.from('clobe_connections').update({credential:seal({...tokens,...t}),expires_at:new Date(Date.now()+t.expires_in*1000).toISOString(),updated_at:lock}).eq('owner_id',owner).eq('refresh_lock',lock);if(saved.error)throw new Error('연결 갱신을 저장하지 못했습니다.');return t.access_token;}finally{await db.from('clobe_connections').update({refresh_lock:null}).eq('owner_id',owner).eq('refresh_lock',lock);}
+}

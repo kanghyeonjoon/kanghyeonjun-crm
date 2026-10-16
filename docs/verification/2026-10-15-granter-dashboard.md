@@ -1,0 +1,17 @@
+# Connected finance dashboard
+
+Source contract: https://app.granter.biz/docs/granter-public-api.md (2026-10-14 revision).
+
+Implemented read surfaces: overview, tickets (12 types), references, assets (10 types), organizations, balances, daily report, FX, workflows, payroll, attendance, leave balances/history, inventory/products, holidays, contacts, categories, legacy tags and current multi-tags, people, teams, workspace/user profiles, subscription, server dispatch history.
+
+28 form contracts support registration/update, evidence linking/unlinking, manual records, invoice/receipt issue/modify/cancel, workflows, payroll and people invitations. Review is bound to user, company, operation and payload with a ten-minute server signature. Execution requires a fresh explicit confirmation and a durable server-only reservation. Exact duplicate payloads remain blocked, including uncertain requests; no automatic replay. API acceptance is not reported as tax authority completion. No actual issuance, invitation, deletion or financial record mutation was used for testing.
+
+Data refresh: every page open and manual reload fetches no-store provider data. Optional visible-page 60-second refresh; no webhook or background sync. Financial institution collection latency still applies. Credentials are server-only. One configured business owner only. Raw financial payloads are not stored in dispatch history. Account numbers masked and credential/identity/location fields stripped before serialization. CSV formula escaping.
+
+Analytics scope: loan-excluded cash series; historical net-cash extrapolation (minimum seven observed days, explicit assumptions); review candidates (not regulatory/ fraud determinations); on-screen budget scenario (not persisted departmental budgets); counterparty cash statistics (not creditworthiness scoring); ecommerce sales/settlement separated (no invented margin absent linked costs). Multi-company UI supports explicitly server-configured connections; currently one. Extra companies require environment configuration GRANTER_CONNECTIONS: [{id,label,envName,workspaceId}], where envName names a separate GRANTER_API_KEY_* secret. No key entry in browser code.
+
+Validation: npm test and next build passed. Provider documentation sample payloads checked against generated form schemas. Database permissions re-queried: RLS enabled, anon select false, authenticated insert false, service role insert true. Security advisor INFO for no RLS policies on this intentional deny-all server table; existing leaked-password-protection warning unchanged.
+
+External mutation controls are implemented and mock/database tested. Real mutation responses depend on Granter permissions, issuer certificates and valid business input; live issuance is deliberately untested until an actual approved user transaction.
+
+Live UI read verification: overview, transactions, assets, organizations, balances, daily report, FX, workflows, salary, attendance, leave history, inventory, products, holidays, contacts, categories, tag lists, people, teams, profiles, subscription, analysis and operation history returned without visible errors. Leave balances request remains unavailable; no replacement zero data is shown. Review-only tag flow reached final confirmation with execution disabled; operation table count remained zero. Mobile form width matched document width (375px), no page-level horizontal overflow. Signed negative daily-report outflow was found live and normalized in the scenario model, with a regression test for both signs.

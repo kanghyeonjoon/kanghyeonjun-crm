@@ -1,0 +1,4002 @@
+[
+  {
+    "id": "post-ticket-references",
+    "endpoint": "ticket-references",
+    "method": "POST",
+    "title": "증빙 연결 등록",
+    "group": "재무 데이터",
+    "fields": [
+      {
+        "key": "isUpdateReferredTicket",
+        "label": "연결 대상 티켓의 참조 정보도 함께 갱신할지 여부. 기본 true",
+        "kind": "boolean",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "targets",
+        "label": "연결할 두 티켓",
+        "kind": "array",
+        "required": true,
+        "children": [
+          {
+            "key": "id",
+            "label": "티켓 ID",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "type",
+            "label": "티켓 타입. `Total`은 사용할 수 없습니다.",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": [
+              "TAX_INVOICE_TICKET",
+              "CASH_RECEIPT_TICKET",
+              "MANUAL_TRANSACTION_TICKET",
+              "WORKFLOW",
+              "EXPENSE_TICKET",
+              "BANK_TRANSACTION_TICKET",
+              "SOCIAL_INSURANCE_PREMIUM_TICKET",
+              "PG_TRANSACTION_TICKET",
+              "LEAVE_RECORD"
+            ]
+          }
+        ],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "delete-ticket-references",
+    "endpoint": "ticket-references",
+    "method": "DELETE",
+    "title": "증빙 연결 해제",
+    "group": "재무 데이터",
+    "fields": [
+      {
+        "key": "ticketReferenceIds",
+        "label": "해제할 연결 관계 ID 목록(1~100개). `ticket-references` 조회 응답의 `ticketReferenceId` 값",
+        "kind": "array",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-ticket-tags",
+    "endpoint": "ticket-tags",
+    "method": "POST",
+    "title": "다중 태그 등록",
+    "group": "기준 정보",
+    "fields": [
+      {
+        "key": "name",
+        "label": "태그 이름. 단계는 `/`로 구분",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "ticketTagGroupId",
+        "label": "태그 그룹 ID",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "description",
+        "label": "태그 설명. 생략하면 빈 설명",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "put-ticket-tags",
+    "endpoint": "ticket-tags",
+    "method": "PUT",
+    "title": "다중 태그 수정",
+    "group": "기준 정보",
+    "fields": [
+      {
+        "key": "id",
+        "label": "수정할 태그 ID",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "name",
+        "label": "새 태그 이름",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "ticketTagGroupId",
+        "label": "태그 그룹 ID. null이면 그룹 해제",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "description",
+        "label": "새 태그 설명",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-tags",
+    "endpoint": "tags",
+    "method": "POST",
+    "title": "1차 태그 등록",
+    "group": "기준 정보",
+    "fields": [
+      {
+        "key": "name",
+        "label": "1차 태그 이름",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "description",
+        "label": "1차 태그 설명",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "put-tags",
+    "endpoint": "tags",
+    "method": "PUT",
+    "title": "1차 태그 수정",
+    "group": "기준 정보",
+    "fields": [
+      {
+        "key": "id",
+        "label": "수정할 1차 태그 ID",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "name",
+        "label": "수정할 1차 태그 이름",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "description",
+        "label": "수정할 1차 태그 설명",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-tag-details",
+    "endpoint": "tag-details",
+    "method": "POST",
+    "title": "2차 태그 등록",
+    "group": "기준 정보",
+    "fields": [
+      {
+        "key": "tagId",
+        "label": "상위 1차 태그 ID",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "name",
+        "label": "2차 태그 이름",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "description",
+        "label": "2차 태그 설명",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "put-tag-details",
+    "endpoint": "tag-details",
+    "method": "PUT",
+    "title": "2차 태그 수정",
+    "group": "기준 정보",
+    "fields": [
+      {
+        "key": "id",
+        "label": "수정할 2차 태그 ID",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "tagId",
+        "label": "상위 1차 태그 ID",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "name",
+        "label": "수정할 2차 태그 이름",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "description",
+        "label": "수정할 2차 태그 설명",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-categories",
+    "endpoint": "categories",
+    "method": "POST",
+    "title": "계정과목 등록",
+    "group": "기준 정보",
+    "fields": [
+      {
+        "key": "name",
+        "label": "계정과목 이름",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "description",
+        "label": "계정과목 설명",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "subInfo",
+        "label": "상위 분류. 예: 판매비와관리비, 영업외비용",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "costType",
+        "label": "비용 유형",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "NONE",
+          "VARIABLE",
+          "FIXED"
+        ]
+      },
+      {
+        "key": "code",
+        "label": "계정과목 코드 번호",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "iconUrl",
+        "label": "아이콘 이미지 URL",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "taxType",
+        "label": "기본 과세 유형",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": [
+          "DETERMINE_NEEDED",
+          "TAXABLE",
+          "EXEMPT",
+          "ZERO_RATED",
+          "NONE"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "put-categories",
+    "endpoint": "categories",
+    "method": "PUT",
+    "title": "계정과목 수정",
+    "group": "기준 정보",
+    "fields": [
+      {
+        "key": "id",
+        "label": "수정할 계정과목 ID",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "name",
+        "label": "수정할 계정과목 이름",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "description",
+        "label": "수정할 계정과목 설명",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "subInfo",
+        "label": "수정할 상위 분류",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "costType",
+        "label": "수정할 비용 유형",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "NONE",
+          "VARIABLE",
+          "FIXED"
+        ]
+      },
+      {
+        "key": "code",
+        "label": "계정과목 코드 번호",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "iconUrl",
+        "label": "아이콘 이미지 URL",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "taxType",
+        "label": "기본 과세 유형",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": [
+          "DETERMINE_NEEDED",
+          "TAXABLE",
+          "EXEMPT",
+          "ZERO_RATED",
+          "NONE"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "post-people",
+    "endpoint": "people",
+    "method": "POST",
+    "title": "구성원 초대",
+    "group": "기준 정보",
+    "fields": [
+      {
+        "key": "users",
+        "label": "초대 대상 목록",
+        "kind": "array",
+        "required": true,
+        "children": [
+          {
+            "key": "email",
+            "label": "초대 대상 이메일",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "name",
+            "label": "초대 대상 이름",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "imageUrl",
+            "label": "프로필 이미지 URL",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "phoneNumber",
+            "label": "전화번호",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-contacts",
+    "endpoint": "contacts",
+    "method": "POST",
+    "title": "거래처 등록",
+    "group": "기준 정보",
+    "fields": [
+      {
+        "key": "companyName",
+        "label": "거래처 상호명/회사명",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "registrationNumber",
+        "label": "고유 사업자/거래처 식별번호 (`-` 없이 10자리 권장)",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "ceoName",
+        "label": "대표자명",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "businessTypes",
+        "label": "업태",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "businessItems",
+        "label": "종목",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "businessPlace",
+        "label": "사업장 주소",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "email",
+        "label": "대표 이메일",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "email2",
+        "label": "보조 이메일",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "phone",
+        "label": "휴대전화",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "tel",
+        "label": "유선 전화번호",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "region",
+        "label": "거래처 지역 구분. 기본값은 DOMESTIC",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": [
+          "DOMESTIC",
+          "FOREIGN"
+        ]
+      },
+      {
+        "key": "memo",
+        "label": "메모/비고",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "accountNumber",
+        "label": "입금 계좌번호",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "bankName",
+        "label": "입금 은행명",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "bankAccountOwnerName",
+        "label": "예금주명",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "managers",
+        "label": "거래처 생성 직후 함께 추가할 담당자 목록(최대 10명). 각 원소의 필드는 아래 `managers[].*`와 같습니다.",
+        "kind": "array",
+        "required": false,
+        "children": [
+          {
+            "key": "name",
+            "label": "담당자 이름 (최대 255자)",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "phoneNumber",
+            "label": "담당자 휴대전화. 하이픈을 빼고 숫자 11자리 (하이픈·공백은 서버가 지웁니다)",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "telNumber",
+            "label": "담당자 전화번호. 하이픈을 빼고 숫자 9~12자리",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "faxNumber",
+            "label": "담당자 팩스번호 (최대 255자)",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email",
+            "label": "담당자 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "memo",
+            "label": "담당자 메모 (최대 32,600자). 생략하면 빈 문자열로 저장합니다.",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "put-contacts",
+    "endpoint": "contacts",
+    "method": "PUT",
+    "title": "거래처 수정",
+    "group": "기준 정보",
+    "fields": [
+      {
+        "key": "contactId",
+        "label": "수정 대상 거래처 ID",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "companyName",
+        "label": "거래처 상호명/회사명",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "registrationNumber",
+        "label": "사업자등록번호 (`-` 없이 10자리 권장)",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "ceoName",
+        "label": "대표자명",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "businessTypes",
+        "label": "업태",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "businessItems",
+        "label": "종목",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "businessPlace",
+        "label": "사업장 주소",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "email",
+        "label": "대표 이메일",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "email2",
+        "label": "보조 이메일",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "phone",
+        "label": "휴대전화",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "tel",
+        "label": "유선 전화번호",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "memo",
+        "label": "메모/비고",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "accountNumber",
+        "label": "입금 계좌번호",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "bankName",
+        "label": "입금 은행명",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "bankAccountOwnerName",
+        "label": "예금주명",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-workflows",
+    "endpoint": "workflows",
+    "method": "POST",
+    "title": "전자결재 등록",
+    "group": "운영 데이터",
+    "fields": [
+      {
+        "key": "title",
+        "label": "결재 제목",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "content",
+        "label": "결재 내용. HTML 문자열도 전달할 수 있습니다.",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "originalAmount",
+        "label": "결재 금액. `150,000원` 같은 문자열도 허용합니다.",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "approverIds",
+        "label": "결재자 ID 배열. 배열 순서대로 1차, 2차 결재자가 됩니다.",
+        "kind": "array",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "reviewerIds",
+        "label": "검토자/참조자 ID 배열",
+        "kind": "array",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "expectedPaymentDate",
+        "label": "지급예정일. 생략 시 요청 처리일 기준 날짜",
+        "kind": "date",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "currency",
+        "label": "통화 코드. 기본값은 KRW",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "refundAccount",
+        "label": "환불/이체 계좌 정보. 제공 시 accountHolder, accountNumber, organizationName이 모두 필요합니다.",
+        "kind": "object",
+        "required": false,
+        "children": [
+          {
+            "key": "accountHolder",
+            "label": "예금주",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "accountNumber",
+            "label": "계좌번호",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "organizationName",
+            "label": "은행명/기관명",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-salary-histories-create",
+    "endpoint": "salary-histories-create",
+    "method": "POST",
+    "title": "급여 등록",
+    "group": "운영 데이터",
+    "fields": [
+      {
+        "key": "employeeId",
+        "label": "직원 ID. 기존 구성원 급여 생성 시 권장",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "employeeName",
+        "label": "직원명. 비회원 또는 수동 급여 생성 시 사용",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "employeeEmail",
+        "label": "직원 이메일",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "employmentType",
+        "label": "고용 형태",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "REGULAR_EMPLOYEE",
+          "NON_REGULAR_EMPLOYEE",
+          "SPECIAL_EMPLOYEE",
+          "REPRESENTATIVE",
+          "FREELANCER",
+          "DAY_LABORER",
+          "CONTRACT_EMPLOYEE",
+          "REGISTERED_EXECUTIVE",
+          "NON_REGISTERED_EXECUTIVE"
+        ]
+      },
+      {
+        "key": "totalAmount",
+        "label": "기본 급여 또는 총 급여 기준 금액",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "paymentDate",
+        "label": "지급일",
+        "kind": "date",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "mealAmount",
+        "label": "비과세 식대. 생략 시 0",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "bonusAmount",
+        "label": "상여금. 생략 시 0",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "allowanceAmount",
+        "label": "수당 합계. 생략 시 allowances 합계 또는 0",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "pensionInsuranceAmount",
+        "label": "국민연금. 생략 시 0",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "healthInsuranceAmount",
+        "label": "건강보험. 생략 시 0",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "employInsuranceAmount",
+        "label": "고용보험. 생략 시 0",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "careInsuranceAmount",
+        "label": "장기요양보험. 생략 시 0",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "bank",
+        "label": "급여 입금 은행명",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "bankAccount",
+        "label": "급여 입금 계좌번호",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "description",
+        "label": "급여 내역 메모",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "recognizedAmount",
+        "label": "실질인정금액. 생략 시 totalAmount + mealAmount",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "netAmount",
+        "label": "실지급액. 생략 시 지급/공제 항목으로 계산",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "employmentDiscount",
+        "label": "고용 할인 유형. 생략 시 NONE",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": [
+          "NONE",
+          "GENERAL",
+          "YOUTH"
+        ]
+      },
+      {
+        "key": "incomeTaxAmount",
+        "label": "소득세. 생략 시 0",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "localIncomeTaxAmount",
+        "label": "지방소득세. 생략 시 0",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "salaryPaymentStatus",
+        "label": "급여 지급 상태. 생략 시 PENDING",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": [
+          "PENDING",
+          "REVIEWED",
+          "PAID"
+        ]
+      },
+      {
+        "key": "scheduledWorkHours",
+        "label": "당월 소정근로시간(시간 단위). 생략 시 지급월 일수 × 8",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "shortfallHours",
+        "label": "미달 근무시간(시간 단위). 생략 시 0",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "unpaidLeaveHours",
+        "label": "무급휴가(시간 단위). 생략 시 0",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "recognizedWorkHours",
+        "label": "근무 인정시간(시간 단위). 생략 시 scheduledWorkHours - shortfallHours - unpaidLeaveHours",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "appliedRatioType",
+        "label": "적용 비율 타입. 생략 시 빈 문자열",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "appliedRatio",
+        "label": "적용 비율. 생략 시 1",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "taxExemptions",
+        "label": "비과세급 상세. 생략 시 빈 배열",
+        "kind": "array",
+        "required": false,
+        "children": [
+          {
+            "key": "title",
+            "label": "항목명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "amount",
+            "label": "금액",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "incentives",
+        "label": "인센티브 상세. 생략 시 빈 배열",
+        "kind": "array",
+        "required": false,
+        "children": [
+          {
+            "key": "title",
+            "label": "항목명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "amount",
+            "label": "금액",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "allowances",
+        "label": "수당 상세. 생략 시 빈 배열",
+        "kind": "array",
+        "required": false,
+        "children": [
+          {
+            "key": "title",
+            "label": "항목명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "amount",
+            "label": "금액",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "deductions",
+        "label": "공제 상세. 생략 시 빈 배열",
+        "kind": "array",
+        "required": false,
+        "children": [
+          {
+            "key": "title",
+            "label": "항목명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "amount",
+            "label": "금액",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-cards",
+    "endpoint": "cards",
+    "method": "POST",
+    "title": "수기 카드 등록",
+    "group": "수기 입력",
+    "fields": [
+      {
+        "key": "name",
+        "label": "카드 별칭/이름",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "organization",
+        "label": "카드사 enum. 수기 카드는 CUSTOM_CARD 권장",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "cardNumber",
+        "label": "카드번호. 숫자만 포함한 문자열로 전달",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-bank-accounts",
+    "endpoint": "bank-accounts",
+    "method": "POST",
+    "title": "수기 계좌 등록",
+    "group": "수기 입력",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "은행 enum. 수기 계좌는 CUSTOM_BANK_ACCOUNT 권장",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "accountName",
+        "label": "계좌명",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "nickname",
+        "label": "계좌 별칭",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "accountNumber",
+        "label": "계좌번호. 문자열이면 하이픈 포함 가능",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "accountBalance",
+        "label": "초기 잔액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "currencyCode",
+        "label": "통화 코드. 기본 KRW",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "accountType",
+        "label": "계좌 유형. DEPOSIT, FOREIGN, FUND, LOAN, INSURANCE, PENSION, CASH 등",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-card-usages",
+    "endpoint": "card-usages",
+    "method": "POST",
+    "title": "수기 카드거래 등록",
+    "group": "수기 입력",
+    "fields": [
+      {
+        "key": "cardId",
+        "label": "대상 카드 자산 ID",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "cardUsages",
+        "label": "카드 사용 내역 배열",
+        "kind": "array",
+        "required": true,
+        "children": [
+          {
+            "key": "paymentDate",
+            "label": "결제 일시",
+            "kind": "datetime",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "storeName",
+            "label": "가맹점명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "amount",
+            "label": "결제 금액",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "paymentStatus",
+            "label": "결제 상태. 기본 NORMAL",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": [
+              "NORMAL",
+              "CANCELED"
+            ]
+          },
+          {
+            "key": "isError",
+            "label": "오류 거래 표시",
+            "kind": "boolean",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-bank-transactions",
+    "endpoint": "bank-transactions",
+    "method": "POST",
+    "title": "수기 계좌거래 등록",
+    "group": "수기 입력",
+    "fields": [
+      {
+        "key": "bankAccountId",
+        "label": "대상 계좌 자산 ID",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "bankTransactions",
+        "label": "계좌 거래 배열",
+        "kind": "array",
+        "required": true,
+        "children": [
+          {
+            "key": "transactAt",
+            "label": "거래 일시",
+            "kind": "datetime",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "transactionType",
+            "label": "거래 방향",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": [
+              "IN",
+              "OUT"
+            ]
+          },
+          {
+            "key": "content",
+            "label": "적요/거래 내용",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "amount",
+            "label": "거래 금액",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "afterTransactionBalance",
+            "label": "거래 후 잔액",
+            "kind": "number",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "counterparty",
+            "label": "거래 상대방",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "isError",
+            "label": "오류 거래 표시",
+            "kind": "boolean",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-manual-transactions",
+    "endpoint": "manual-transactions",
+    "method": "POST",
+    "title": "수기관리 전표 등록",
+    "group": "수기 입력",
+    "fields": [
+      {
+        "key": "manualTransactions",
+        "label": "생성할 수기관리 전표 배열. 최대 100건",
+        "kind": "array",
+        "required": true,
+        "children": [
+          {
+            "key": "contactId",
+            "label": "거래처 ID",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": true,
+            "options": []
+          },
+          {
+            "key": "transactionType",
+            "label": "매출/매입 방향",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": [
+              "IN",
+              "OUT"
+            ]
+          },
+          {
+            "key": "manualTransactionType",
+            "label": "수기거래 유형",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": [
+              "ETC",
+              "CASH",
+              "INVOICE"
+            ]
+          },
+          {
+            "key": "transactAt",
+            "label": "거래 일시",
+            "kind": "datetime",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "amount",
+            "label": "거래 금액",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "content",
+            "label": "적요/거래 내용",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "currency",
+            "label": "통화 코드. 기본 KRW",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "description",
+            "label": "추가 설명. 기본 빈 문자열",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "expenseCategoryId",
+            "label": "계정과목 ID",
+            "kind": "number",
+            "required": false,
+            "children": [],
+            "integer": true,
+            "options": []
+          },
+          {
+            "key": "ticketTagIds",
+            "label": "붙일 태그 ID 목록(`ticket-tags` API 의 id). 최대 100개",
+            "kind": "array",
+            "required": false,
+            "children": [],
+            "integer": true,
+            "options": []
+          },
+          {
+            "key": "tradeItems",
+            "label": "품목 배열",
+            "kind": "array",
+            "required": false,
+            "children": [
+              {
+                "key": "itemName",
+                "label": "품목명",
+                "kind": "string",
+                "required": true,
+                "children": [],
+                "integer": false,
+                "options": []
+              },
+              {
+                "key": "quantity",
+                "label": "수량",
+                "kind": "number",
+                "required": true,
+                "children": [],
+                "integer": false,
+                "options": []
+              },
+              {
+                "key": "unitPrice",
+                "label": "단가",
+                "kind": "number",
+                "required": true,
+                "children": [],
+                "integer": false,
+                "options": []
+              },
+              {
+                "key": "taxAmount",
+                "label": "세액",
+                "kind": "number",
+                "required": true,
+                "children": [],
+                "integer": false,
+                "options": []
+              },
+              {
+                "key": "supplyValue",
+                "label": "공급가액. 생략하면 단가 × 수량을 원 단위로 절사해 저장한다",
+                "kind": "number",
+                "required": false,
+                "children": [],
+                "integer": false,
+                "options": []
+              },
+              {
+                "key": "isIncludedVat",
+                "label": "단가의 부가세 포함 여부 (기본 false)",
+                "kind": "boolean",
+                "required": false,
+                "children": [],
+                "integer": false,
+                "options": []
+              }
+            ],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "delete-manual-transactions",
+    "endpoint": "manual-transactions",
+    "method": "DELETE",
+    "title": "수기관리 전표 삭제",
+    "group": "수기 입력",
+    "fields": [
+      {
+        "key": "ticketIds",
+        "label": "삭제할 수기관리 티켓 ID 배열. 최대 100건",
+        "kind": "array",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-tax-invoices",
+    "endpoint": "tax-invoices",
+    "method": "POST",
+    "title": "수기 세금계산서 등록",
+    "group": "수기 입력",
+    "fields": [
+      {
+        "key": "issueType",
+        "label": "발행 구분. 기본 정발행",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "taxType",
+        "label": "과세 유형. 기본 TAX",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": [
+          "TAX",
+          "ZERO_TAX_RATE",
+          "TAX_EXEMPTION"
+        ]
+      },
+      {
+        "key": "contractorType",
+        "label": "공급받는 자 구분. 기본 BUSINESS",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": [
+          "BUSINESS",
+          "INDIVIDUAL",
+          "FOREIGNER"
+        ]
+      },
+      {
+        "key": "purposeType",
+        "label": "영수/청구 구분. 기본 RECEIPT",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": [
+          "RECEIPT",
+          "CHARGE",
+          "NONE"
+        ]
+      },
+      {
+        "key": "reportingDate",
+        "label": "작성일자",
+        "kind": "date",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "supplyValue",
+        "label": "공급가액",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "taxAmount",
+        "label": "세액. 생략 시 과세 건은 공급가액의 10%",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "totalAmount",
+        "label": "합계금액. 생략 시 공급가액 + 세액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "note",
+        "label": "비고",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "supplier",
+        "label": "공급자",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "registrationNumber",
+            "label": "공급자 사업자등록번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "companyName",
+            "label": "공급자 상호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "ceoName",
+            "label": "공급자 대표자명. 생략 시 companyName 사용",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email",
+            "label": "공급자 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "contractor",
+        "label": "공급받는 자",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "registrationNumber",
+            "label": "공급받는 자 사업자등록번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "companyName",
+            "label": "공급받는 자 상호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "ceoName",
+            "label": "공급받는 자 대표자명. 생략 시 companyName 사용",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email",
+            "label": "공급받는 자 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "tradeItems",
+        "label": "품목 배열. 생략 시 공급가액 기준 1건 자동 생성",
+        "kind": "array",
+        "required": false,
+        "children": [
+          {
+            "key": "purchaseExpiryDate",
+            "label": "공급일자",
+            "kind": "date",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "taxItemName",
+            "label": "세금계산서 품목란에 그대로 표시되는 품목명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "standards",
+            "label": "규격",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "quantity",
+            "label": "수량",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "unitPrice",
+            "label": "단가. 음수 가능",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "supplyValue",
+            "label": "품목 공급가액. 음수 가능",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": true,
+            "options": []
+          },
+          {
+            "key": "taxAmount",
+            "label": "품목 세액. 음수 가능",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": true,
+            "options": []
+          },
+          {
+            "key": "note",
+            "label": "품목 행 비고란에 표시되는 비고",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "integer": false,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "post-cash-receipts",
+    "endpoint": "cash-receipts",
+    "method": "POST",
+    "title": "수기 현금영수증 등록",
+    "group": "수기 입력",
+    "fields": [
+      {
+        "key": "transactAt",
+        "label": "거래일시. upstream에는 YYYY-MM-DDTHH:mm:ss로 정규화",
+        "kind": "datetime",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "content",
+        "label": "거래 내용. 기본 현금영수증",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "usage",
+        "label": "용도. 기본 EXPENSE_PROOF",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": [
+          "TAX_DEDUCTION",
+          "EXPENSE_PROOF"
+        ]
+      },
+      {
+        "key": "taxationType",
+        "label": "과세 형태. 기본 TAXABLE",
+        "kind": "string",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": [
+          "TAXABLE",
+          "NON_TAXABLE"
+        ]
+      },
+      {
+        "key": "totalAmount",
+        "label": "총금액",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "supplyValue",
+        "label": "공급가액. 생략 시 자동 계산",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "vat",
+        "label": "부가세. 생략 시 자동 계산",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "serviceFee",
+        "label": "봉사료. 기본 0",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "issuer",
+        "label": "발행자",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "registrationNumber",
+            "label": "발행자 사업자등록번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "companyName",
+            "label": "발행자 상호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "buyer",
+        "label": "구매자",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "identityNumber",
+            "label": "구매자 식별번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "userName",
+            "label": "구매자 이름/상호",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      }
+    ]
+  },
+  {
+    "id": "post-tax-invoices-issue",
+    "endpoint": "tax-invoices/issue",
+    "method": "POST",
+    "title": "세금계산서 발행",
+    "group": "증빙 발행",
+    "fields": [
+      {
+        "key": "issueType",
+        "label": "발행 타입. 일반적으로 `정발행`을 사용합니다.",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "taxType",
+        "label": "과세 유형",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "TAX",
+          "ZERO_TAX_RATE",
+          "TAX_EXEMPTION"
+        ]
+      },
+      {
+        "key": "chargeDirection",
+        "label": "청구 방향. 일반적으로 `정과금`을 사용합니다.",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "reportingDate",
+        "label": "작성일자. 반복발행이면 `null`입니다.",
+        "kind": "date",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "issueScheduleType",
+        "label": "발행 스케줄 타입",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "IMMEDIATE",
+          "SCHEDULED",
+          "RECURRING"
+        ]
+      },
+      {
+        "key": "recurringScheduleOption",
+        "label": "반복 발행 일정",
+        "kind": "object",
+        "required": false,
+        "children": [
+          {
+            "key": "dayOfMonth",
+            "label": "반복발행(RECURRING)일 때 필요한 발행 일자 (1~31)",
+            "kind": "number",
+            "required": false,
+            "children": [],
+            "integer": true,
+            "options": []
+          },
+          {
+            "key": "endDate",
+            "label": "반복발행(RECURRING)일 때 필요한 종료일",
+            "kind": "date",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "purposeType",
+        "label": "영수/청구 구분",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "RECEIPT",
+          "CHARGE"
+        ]
+      },
+      {
+        "key": "supplyValue",
+        "label": "공급가액. 음수 가능",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "taxAmount",
+        "label": "세액. 음수 가능",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "totalAmount",
+        "label": "합계금액. 음수 가능",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "cash",
+        "label": "현금 금액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "check",
+        "label": "수표 금액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "bankBill",
+        "label": "어음 금액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "accountReceivable",
+        "label": "외상미수금 금액. 결제수단 금액 합계는 totalAmount와 같아야 합니다.",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "note",
+        "label": "세금계산서 상단 비고란에 표시되는 비고",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "contractorType",
+        "label": "공급받는자 유형",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "BUSINESS",
+          "INDIVIDUAL",
+          "FOREIGNER"
+        ]
+      },
+      {
+        "key": "forceIssue",
+        "label": "강제 발행 여부",
+        "kind": "boolean",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "writeSpecification",
+        "label": "명세 작성 여부",
+        "kind": "boolean",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "memo",
+        "label": "그랜터 내부 메모. 세금계산서 품목/비고에는 표시되지 않습니다.",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "supplier",
+        "label": "공급자",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "registrationNumber",
+            "label": "공급자 사업자등록번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "companyName",
+            "label": "공급자 회사명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "ceoName",
+            "label": "공급자 대표자명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email",
+            "label": "공급자 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email2",
+            "label": "공급자 보조 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "tel",
+            "label": "발행 세금계산서 담당자 연락처에 반영되는 공급자 연락처",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "phone",
+            "label": "기존 호환용 연락처 alias. tel 미입력 시 연락처로 사용되며, tel과 함께 보내면 tel이 우선됩니다.",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessTypes",
+            "label": "공급자 업태",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessItems",
+            "label": "공급자 종목",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessPlace",
+            "label": "공급자 사업장 주소",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "contractor",
+        "label": "공급받는 자",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "registrationNumber",
+            "label": "공급받는자 사업자등록번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "companyName",
+            "label": "공급받는자 회사명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "ceoName",
+            "label": "공급받는자 대표자명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email",
+            "label": "공급받는자 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email2",
+            "label": "공급받는자 보조 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "tel",
+            "label": "발행 세금계산서 담당자 연락처에 반영되는 공급받는자 연락처",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "phone",
+            "label": "기존 호환용 연락처 alias. tel 미입력 시 연락처로 사용되며, tel과 함께 보내면 tel이 우선됩니다.",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessTypes",
+            "label": "공급받는자 업태",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessItems",
+            "label": "공급받는자 종목",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessPlace",
+            "label": "공급받는자 사업장 주소",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "tradeItems",
+        "label": "품목",
+        "kind": "array",
+        "required": false,
+        "children": [
+          {
+            "key": "purchaseExpiryDate",
+            "label": "공급일자",
+            "kind": "date",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "taxItemName",
+            "label": "세금계산서 품목란에 그대로 표시되는 품목명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "standards",
+            "label": "규격",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "quantity",
+            "label": "수량",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "unitPrice",
+            "label": "단가. 음수 가능",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "supplyValue",
+            "label": "품목 공급가액. 음수 가능",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": true,
+            "options": []
+          },
+          {
+            "key": "taxAmount",
+            "label": "품목 세액. 음수 가능",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": true,
+            "options": []
+          },
+          {
+            "key": "note",
+            "label": "품목 행 비고란에 표시되는 비고",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      }
+    ]
+  },
+  {
+    "id": "post-tax-invoices-modify-issue",
+    "endpoint": "tax-invoices/modify-issue",
+    "method": "POST",
+    "title": "세금계산서 수정발행",
+    "group": "증빙 발행",
+    "fields": [
+      {
+        "key": "issueType",
+        "label": "발행 타입. 일반적으로 `정발행`을 사용합니다.",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "taxType",
+        "label": "과세 유형",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "TAX",
+          "ZERO_TAX_RATE",
+          "TAX_EXEMPTION"
+        ]
+      },
+      {
+        "key": "chargeDirection",
+        "label": "청구 방향. 일반적으로 `정과금`을 사용합니다.",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "reportingDate",
+        "label": "수정세금계산서 작성일자",
+        "kind": "date",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "purposeType",
+        "label": "영수/청구 구분",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "RECEIPT",
+          "CHARGE"
+        ]
+      },
+      {
+        "key": "supplyValue",
+        "label": "공급가액. 차액 수정이면 음수/양수 모두 가능",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "taxAmount",
+        "label": "세액. 차액 수정이면 음수/양수 모두 가능",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "totalAmount",
+        "label": "합계금액. 차액 수정이면 음수/양수 모두 가능",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "cash",
+        "label": "현금 금액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "check",
+        "label": "수표 금액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "bankBill",
+        "label": "어음 금액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "accountReceivable",
+        "label": "외상미수금 금액. 결제수단 금액 합계는 totalAmount와 같아야 합니다.",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "note",
+        "label": "세금계산서 상단 비고란에 표시되는 비고",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "contractorType",
+        "label": "공급받는자 유형",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "BUSINESS",
+          "INDIVIDUAL",
+          "FOREIGNER"
+        ]
+      },
+      {
+        "key": "forceIssue",
+        "label": "강제 발행 여부",
+        "kind": "boolean",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "writeSpecification",
+        "label": "명세 작성 여부",
+        "kind": "boolean",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "memo",
+        "label": "그랜터 내부 메모. 세금계산서 품목/비고에는 표시되지 않습니다.",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "supplier",
+        "label": "공급자",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "registrationNumber",
+            "label": "공급자 사업자등록번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "companyName",
+            "label": "공급자 회사명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "ceoName",
+            "label": "공급자 대표자명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email",
+            "label": "공급자 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email2",
+            "label": "공급자 보조 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "tel",
+            "label": "발행 세금계산서 담당자 연락처에 반영되는 공급자 연락처",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "phone",
+            "label": "기존 호환용 연락처 alias. tel 미입력 시 연락처로 사용되며, tel과 함께 보내면 tel이 우선됩니다.",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessTypes",
+            "label": "공급자 업태",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessItems",
+            "label": "공급자 종목",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessPlace",
+            "label": "공급자 사업장 주소",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "contractor",
+        "label": "공급받는 자",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "registrationNumber",
+            "label": "공급받는자 사업자등록번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "companyName",
+            "label": "공급받는자 회사명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "ceoName",
+            "label": "공급받는자 대표자명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email",
+            "label": "공급받는자 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email2",
+            "label": "공급받는자 보조 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "tel",
+            "label": "발행 세금계산서 담당자 연락처에 반영되는 공급받는자 연락처",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "phone",
+            "label": "기존 호환용 연락처 alias. tel 미입력 시 연락처로 사용되며, tel과 함께 보내면 tel이 우선됩니다.",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessTypes",
+            "label": "공급받는자 업태",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessItems",
+            "label": "공급받는자 종목",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessPlace",
+            "label": "공급받는자 사업장 주소",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "tradeItems",
+        "label": "품목",
+        "kind": "array",
+        "required": false,
+        "children": [
+          {
+            "key": "purchaseExpiryDate",
+            "label": "공급일자",
+            "kind": "date",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "taxItemName",
+            "label": "세금계산서 품목란에 그대로 표시되는 품목명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "standards",
+            "label": "규격",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "quantity",
+            "label": "수량",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "unitPrice",
+            "label": "단가. 음수 가능",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "supplyValue",
+            "label": "품목 공급가액. 음수 가능",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": true,
+            "options": []
+          },
+          {
+            "key": "taxAmount",
+            "label": "품목 세액. 음수 가능",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": true,
+            "options": []
+          },
+          {
+            "key": "note",
+            "label": "품목 행 비고란에 표시되는 비고",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "modificationOption",
+        "label": "수정·취소 사유",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "modificationReason",
+            "label": "수정사유",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": [
+              "기재사항 착오정정",
+              "공급가액 변동"
+            ]
+          },
+          {
+            "key": "originalApprovalNumber",
+            "label": "원본 승인번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      }
+    ]
+  },
+  {
+    "id": "post-tax-invoices-cancel-issue",
+    "endpoint": "tax-invoices/cancel-issue",
+    "method": "POST",
+    "title": "세금계산서 취소발행",
+    "group": "증빙 발행",
+    "fields": [
+      {
+        "key": "issueType",
+        "label": "발행 타입. 일반적으로 `정발행`을 사용합니다.",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "taxType",
+        "label": "과세 유형",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "TAX",
+          "ZERO_TAX_RATE",
+          "TAX_EXEMPTION"
+        ]
+      },
+      {
+        "key": "chargeDirection",
+        "label": "청구 방향. 일반적으로 `정과금`을 사용합니다.",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "reportingDate",
+        "label": "취소발행 작성일자",
+        "kind": "date",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "purposeType",
+        "label": "영수/청구 구분",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "RECEIPT",
+          "CHARGE"
+        ]
+      },
+      {
+        "key": "supplyValue",
+        "label": "음수 공급가액",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "taxAmount",
+        "label": "음수 세액",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "totalAmount",
+        "label": "음수 합계금액",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "cash",
+        "label": "현금 금액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "check",
+        "label": "수표 금액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "bankBill",
+        "label": "어음 금액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "accountReceivable",
+        "label": "외상미수금 금액. 결제수단 금액 합계는 totalAmount와 같아야 합니다.",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "note",
+        "label": "세금계산서 상단 비고란에 표시되는 비고",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "contractorType",
+        "label": "공급받는자 유형",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "BUSINESS",
+          "INDIVIDUAL",
+          "FOREIGNER"
+        ]
+      },
+      {
+        "key": "forceIssue",
+        "label": "강제 발행 여부",
+        "kind": "boolean",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "writeSpecification",
+        "label": "명세 작성 여부",
+        "kind": "boolean",
+        "required": false,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "memo",
+        "label": "그랜터 내부 메모. 세금계산서 품목/비고에는 표시되지 않습니다.",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "supplier",
+        "label": "공급자",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "registrationNumber",
+            "label": "공급자 사업자등록번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "companyName",
+            "label": "공급자 회사명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "ceoName",
+            "label": "공급자 대표자명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email",
+            "label": "공급자 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email2",
+            "label": "공급자 보조 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "tel",
+            "label": "발행 세금계산서 담당자 연락처에 반영되는 공급자 연락처",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "phone",
+            "label": "기존 호환용 연락처 alias. tel 미입력 시 연락처로 사용되며, tel과 함께 보내면 tel이 우선됩니다.",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessTypes",
+            "label": "공급자 업태",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessItems",
+            "label": "공급자 종목",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessPlace",
+            "label": "공급자 사업장 주소",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "contractor",
+        "label": "공급받는 자",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "registrationNumber",
+            "label": "공급받는자 사업자등록번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "companyName",
+            "label": "공급받는자 회사명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "ceoName",
+            "label": "공급받는자 대표자명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email",
+            "label": "공급받는자 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "email2",
+            "label": "공급받는자 보조 이메일",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "tel",
+            "label": "발행 세금계산서 담당자 연락처에 반영되는 공급받는자 연락처",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "phone",
+            "label": "기존 호환용 연락처 alias. tel 미입력 시 연락처로 사용되며, tel과 함께 보내면 tel이 우선됩니다.",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessTypes",
+            "label": "공급받는자 업태",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessItems",
+            "label": "공급받는자 종목",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "businessPlace",
+            "label": "공급받는자 사업장 주소",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "tradeItems",
+        "label": "품목",
+        "kind": "array",
+        "required": false,
+        "children": [
+          {
+            "key": "purchaseExpiryDate",
+            "label": "공급일자",
+            "kind": "date",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "taxItemName",
+            "label": "세금계산서 품목란에 그대로 표시되는 품목명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "standards",
+            "label": "규격",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "quantity",
+            "label": "수량",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "unitPrice",
+            "label": "단가. 음수 가능",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "supplyValue",
+            "label": "품목 공급가액. 음수 가능",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": true,
+            "options": []
+          },
+          {
+            "key": "taxAmount",
+            "label": "품목 세액. 음수 가능",
+            "kind": "number",
+            "required": true,
+            "children": [],
+            "integer": true,
+            "options": []
+          },
+          {
+            "key": "note",
+            "label": "품목 행 비고란에 표시되는 비고",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "modificationOption",
+        "label": "수정·취소 사유",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "modificationReason",
+            "label": "취소 사유",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": [
+              "착오에 의한 이중발급",
+              "계약의 해제"
+            ]
+          },
+          {
+            "key": "originalApprovalNumber",
+            "label": "원본 승인번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      }
+    ]
+  },
+  {
+    "id": "post-cash-receipts-issue",
+    "endpoint": "cash-receipts/issue",
+    "method": "POST",
+    "title": "현금영수증 발행",
+    "group": "증빙 발행",
+    "fields": [
+      {
+        "key": "homeTaxAccountId",
+        "label": "발행에 사용할 홈택스 자산 ID",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "transactAt",
+        "label": "거래 일시",
+        "kind": "datetime",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "content",
+        "label": "거래 내용",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "usage",
+        "label": "발행 용도",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "TAX_DEDUCTION",
+          "EXPENSE_PROOF"
+        ]
+      },
+      {
+        "key": "taxationType",
+        "label": "과세 형태",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "TAXABLE",
+          "NON_TAXABLE"
+        ]
+      },
+      {
+        "key": "totalAmount",
+        "label": "총금액",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "supplyValue",
+        "label": "공급가액",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "vat",
+        "label": "부가세",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "serviceFee",
+        "label": "봉사료",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "issuer",
+        "label": "발행자",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "registrationNumber",
+            "label": "발행자 사업자등록번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "companyName",
+            "label": "발행자 회사명",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      },
+      {
+        "key": "buyer",
+        "label": "구매자",
+        "kind": "object",
+        "required": true,
+        "children": [
+          {
+            "key": "identityNumber",
+            "label": "구매자 식별번호",
+            "kind": "string",
+            "required": true,
+            "children": [],
+            "integer": false,
+            "options": []
+          },
+          {
+            "key": "userName",
+            "label": "구매자명",
+            "kind": "string",
+            "required": false,
+            "children": [],
+            "integer": false,
+            "options": []
+          }
+        ],
+        "options": [],
+        "integer": false
+      }
+    ]
+  },
+  {
+    "id": "post-cash-receipts-cancel-issue",
+    "endpoint": "cash-receipts/cancel-issue",
+    "method": "POST",
+    "title": "현금영수증 취소발행",
+    "group": "증빙 발행",
+    "fields": [
+      {
+        "key": "cashReceiptId",
+        "label": "취소 대상 현금영수증 ID",
+        "kind": "number",
+        "required": true,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "transactAt",
+        "label": "취소 거래 일시",
+        "kind": "datetime",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "cancelReason",
+        "label": "취소 사유",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": [
+          "TRANSACTION_CANCELED",
+          "ERROR_ISSUE_CANCELED",
+          "OTHER"
+        ]
+      },
+      {
+        "key": "content",
+        "label": "메모 또는 취소 내용",
+        "kind": "string",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "isPartialCancel",
+        "label": "부분취소 여부",
+        "kind": "boolean",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      },
+      {
+        "key": "totalAmount",
+        "label": "부분취소 총금액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "supplyValue",
+        "label": "부분취소 공급가액",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "vat",
+        "label": "부분취소 부가세",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "serviceFee",
+        "label": "부분취소 봉사료",
+        "kind": "number",
+        "required": false,
+        "children": [],
+        "integer": true,
+        "options": []
+      },
+      {
+        "key": "emails",
+        "label": "수신 이메일 목록",
+        "kind": "array",
+        "required": true,
+        "children": [],
+        "integer": false,
+        "options": []
+      }
+    ]
+  }
+]

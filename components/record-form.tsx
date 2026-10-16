@@ -1,6 +1,7 @@
 "use client";
 import { useActionState, useEffect } from "react";
-import { saveRecord } from "@/app/workspace/actions";
+import { saveRecord } from "@/app/(crm)/workspace/actions";
+import { hospitalChoiceLabel, type HospitalChoice } from "@/lib/hospital-choice";
 import {
   management,
   proposalStates,
@@ -15,7 +16,7 @@ export function RecordForm({
   onSaved,
 }: {
   entity: Entity;
-  hospitals?: { id: string; name: string }[];
+  hospitals?: HospitalChoice[];
   record?: Row;
   onSaved?: () => void;
 }) {
@@ -92,7 +93,7 @@ export function RecordForm({
           {select(
             "hospital_id",
             "병원 선택",
-            Object.fromEntries(hospitals.map((h) => [h.id, h.name])),
+            Object.fromEntries(hospitals.map((h) => [h.id, hospitalChoiceLabel(h)])),
           )}
           {entity === "proposals" ? (
             <>
