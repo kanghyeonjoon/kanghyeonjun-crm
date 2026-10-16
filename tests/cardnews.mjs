@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {assetInput,cardId} from '../lib/cardnews.ts';
+const a={result_id:cardId,name:'slide-01.png',kind:'image',position:1,sha256:'a'.repeat(64),bytes:500};
+assert.equal(assetInput(a).storage_path,`${cardId}/${a.sha256}.png`);
+for(const patch of [{name:'../a.png'},{name:'https://a.png'},{result_id:'other'},{sha256:'bad'},{bytes:33554433},{position:9},{kind:'html'},{name:'a.html'}])assert.throws(()=>assetInput({...a,...patch}));
+assert.equal(assetInput({...a,kind:'zip',position:0,name:'card.zip'}).storage_path,`${cardId}/${a.sha256}.zip`);
+const {PGlite}=await import('@electric-sql/pglite');const db=new PGlite();
+await db.exec(`create role anon;create role authenticated;create schema crm_private;create schema storage;create table storage.buckets(id text,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);create table storage.objects(bucket_id text,name text);alter table storage.objects enable row level security;grant usage on schema crm_private,storage to authenticated;grant select,insert on storage.objects to authenticated;create function crm_private.can_access(w boolean default false) returns boolean language sql as $$select current_setting('test.role',true)='owner' or (not w and current_setting('test.role',true)='viewer')$$;`);
+await db.exec(fs.readFileSync('work/cardnews-erp-20261016/storage.sql','utf8').replace("notify pgrst,'reload schema';",''));
+await db.exec("set role authenticated;set test.role='owner'");
+const insert=`insert into public.cardnews_assets(result_id,name,kind,position,sha256,bytes,storage_path) values('card-4907aaca','a.png','image',1,'${a.sha256}',500,'${assetInput(a).storage_path}')`;
+await db.exec(insert);await assert.rejects(db.exec(insert));
+await db.exec("set test.role='viewer'");assert.equal((await db.query('select * from public.cardnews_assets')).rows.length,1);await assert.rejects(db.exec(insert.replace("'image',1","'image',2")));
+await db.exec("set test.role='inactive'");assert.equal((await db.query('select * from public.cardnews_assets')).rows.length,0);await assert.rejects(db.exec("insert into storage.objects values('crm-cardnews','card-4907aaca/evil.png')"));
+await db.exec('set role anon');await assert.rejects(db.query('select * from public.cardnews_assets'));await db.close();
+console.log('cardnews: validation, duplicates, owner/viewer/inactive/anon RLS passed');

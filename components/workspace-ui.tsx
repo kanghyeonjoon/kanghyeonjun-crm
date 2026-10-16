@@ -1,4 +1,5 @@
 "use client";
+import ContentNav from './content-nav';
 import Link from "next/link";
 import WorkspaceNavIcon from "./workspace-nav-icon";
 import FleetStatus from "./fleet-status";
@@ -258,7 +259,7 @@ export function WorkspaceUI({
           <Link href="/workspace/columns" title="칼럼 관리" aria-label="칼럼 관리"><WorkspaceNavIcon label="칼럼 관리" /><span className="erp-nav-label">칼럼 관리</span></Link>
           {role === "owner" && <Link href="/workspace/finance/clobe" title="재무 관리" aria-label="재무 관리"><WorkspaceNavIcon label="재무 관리" /><span className="erp-nav-label">재무 관리</span></Link>}
           <Link href="/workspace/diagnoses" title="무료진단 신청" aria-label="무료진단 신청"><WorkspaceNavIcon label="무료진단 신청" /><span className="erp-nav-label">무료진단 신청</span></Link>
-        </nav>
+        <ContentNav/></nav>
         <div className="erp-sidebar-bottom">
           <span className="erp-nav-label">병원 정보 · 제안서 · 영업</span>
         </div>
