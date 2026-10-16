@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { signout } from "@/app/(crm)/login/actions";
 import { RecordForm } from "./record-form";
+import type { HospitalChoice } from "@/lib/hospital-choice";
 import {
   management,
   proposalStates,
@@ -58,7 +59,7 @@ export function WorkspaceUI({
   email: string;
   role: string;
   rows: Row[];
-  hospitals: { id: string; name: string }[];
+  hospitals: HospitalChoice[];
   total: number;
   totals: number[];
   page: number;

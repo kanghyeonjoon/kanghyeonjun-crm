@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {hospitalChoiceLabel} from '../lib/hospital-choice.ts';
+const a={id:'11111111-1111-4111-8111-111111111111',name:'동명병원',branch:'',address:'서울 A로 1'};
+const b={...a,id:'22222222-2222-4222-8222-222222222222',address:'부산 B로 2'};
+const options=Object.fromEntries([a,b].map(h=>[h.id,hospitalChoiceLabel(h)]));
+assert.deepEqual(Object.keys(options),[a.id,b.id]);
+assert.notEqual(options[a.id],options[b.id]);
+assert.match(options[a.id],/서울 A로 1/);
+assert.match(options[b.id],/부산 B로 2/);
+assert.match(hospitalChoiceLabel({...a,branch:' 본점 ',address:null}),/본점 · 주소 미등록 · ID 11111111/);
+assert.notEqual(hospitalChoiceLabel({...a,address:null}),hospitalChoiceLabel({...b,address:null}));
+console.log('PASS: duplicate names distinguishable; original option IDs preserved; missing address and branch handled');

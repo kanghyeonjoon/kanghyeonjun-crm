@@ -64,7 +64,7 @@ export default async function Workspace({
     filtered(true),
     client
       .from("hospitals")
-      .select("id,name")
+      .select("id,name,branch,address")
       .order("name")
       .order("id")
       .limit(1000),
